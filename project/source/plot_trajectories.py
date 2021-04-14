@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from constants import *
 
 
-#this is incosistant, and shouldn't be redefined in every file!
-num_bodies = 8
 
 #will need a list of this, for each file, think the bash script needs to create this files!
 coord_file_base = 'source/results/data_body_'

@@ -1,10 +1,9 @@
 import math
+from constants import *
 import csv
 
-G = 2.96 *10**(-4) #units of Au^3/solar_mass/days^2
-#G=10
 
-dt = 0.01
+###dt = 0.01
 #at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
 
 class celestial_body:
@@ -53,7 +52,8 @@ class celestial_body:
         self.ax = 0
         self.ay = 0
 
-coord_file = 'source/planet_coordinates.txt'
+#coord_file = 'source/planet_coordinates.txt'
+coord_file = 'source/' + planet_coord_file
 #format of file may need more consideration, not sure if txt file is the best bet!
 
 
@@ -68,7 +68,7 @@ with open(coord_file, 'r') as f:
 
 
 
-for i in range(50000):
+for i in range(iters):
     
     #may need to check these loops
     #these get the acceleration of each body from all the other ones!
@@ -135,13 +135,13 @@ for i in range(50000):
 
 
 #probably make this more specific to each program, eg body1_basic_py etc
+#files to output results to!
 coord_file_base = 'source/results/data_body_'
 
-num_bodies = 8
 
 #not sure if this is the most efficient way of doing this, but should be alright!
 #maybe should time this to make sure it isn't a big time sink!
-for i in range(num_bodies+1):
+for i in range(num_bodies):
     output_file_str = coord_file_base + str(i) + '.txt'
     #print(output_file)
     

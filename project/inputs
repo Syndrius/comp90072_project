@@ -1,0 +1,10 @@
+#note this file does not need to be a txt file, can just be extensionless!
+#comment here
+#probably want this to contain just true false, and have a constants file
+#maybe the bash script can edit the constants file for things like step size
+#and plotting?
+BASE_PY=TRUE
+
+
+#another one
+NUM_PLANETS=8
