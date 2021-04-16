@@ -13,6 +13,14 @@ if test ! -f "source/planet_coords.txt"; then
     eval python3 source/get_planet_coords.py
 fi
 
+num_lines=$(< "source/planet_coords.txt" wc -l)
+
+#define the file golly gosh!
+#if the file only has 9 lines, the asteroid needs to be added
+if test $num_lines -eq 9; then
+   eval python3 source/compute_asteroid.py
+fi
+
 #want to add in conditions to maybe delete resutls folder
 #maybe to make sure the directory exists for now:
 

@@ -1,4 +1,9 @@
-num_bodies = 9
+#this file's purpose is unclear atm, different files are reading different things from this 
+
+
+num_bodies = 10
+bodies_to_query = 9
+
 
 
 #conversions to get units in better forms
@@ -32,7 +37,7 @@ G = 2.96 *10**(-4) #units of Au^3/solar_mass/days^2
 dt = 0.01
 
 
-iters = 50000
+iters = 500000
 
 
 #will need to contain a list of files for the results to be written to, bash may

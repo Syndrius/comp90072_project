@@ -1,3 +1,5 @@
+#this file is quite slow, probably because of the large file reading??
+#but shouldn't need to be called much so doesn't matter
 import numpy as np
 import matplotlib.pyplot as plt
 from constants import *
@@ -8,6 +10,8 @@ from constants import *
 coord_file_base = 'source/results/data_body_'
 
 
+#will need to be very careful with the num_bodies here, its purpose
+#as a constant is not super clear!
 for i in range(num_bodies):
     input_file_str = coord_file_base + str(i) + '.txt'
     #x = []

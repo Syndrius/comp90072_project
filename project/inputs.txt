@@ -1,3 +1,0 @@
-Placeholder, will eventually contain all of the True False etc for which programs to be run.
-
-Will be read by the Bash script
