@@ -56,7 +56,15 @@ class celestial_body:
 #the basic simulation function, takes a list of celestial bodies
 #and the number of iterations!
 def run_simulation(solar_system, iters):
-
+    body1 = solar_system[0]
+    body2 = solar_system[1]
+    y_diff = body2.y - body1.y
+    x_diff = body2.x - body1.x
+    angle = math.atan2(y_diff, x_diff)
+    force = G*body1.mass*body2.mass/(x_diff**2 + y_diff**2) 
+    a1 = force/body1.mass
+    a2 = force/body2.mass
+    print(y_diff, x_diff, angle, force, a1, a2)
     for i in range(iters):
         
         #may need to check these loops

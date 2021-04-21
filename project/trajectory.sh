@@ -34,6 +34,6 @@ if test ! -e 'source/results'; then
     eval mkdir source/results
 fi
 
-eval python3 source/basic_python_sim.py
+#eval python3 source/basic_python_sim.py
 
-eval python3 source/plot_trajectories.py
+#eval python3 source/plot_trajectories.py

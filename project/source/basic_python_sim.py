@@ -24,6 +24,9 @@ with open(coord_file, 'r') as f:
         #may not be the correct type, but not sure that will matter!
         solar_system.append(core.celestial_body(*coord_list))
 
+
+
+
 solar_system = core.run_simulation(solar_system, iters)
 
 
