@@ -3,8 +3,21 @@
 #probably want this to contain just true false, and have a constants file
 #maybe the bash script can edit the constants file for things like step size
 #and plotting?
-BASE_PY=TRUE
+
+#for cleaning the directory etc
+CLEAN=false
+
+
+RUN_C_SIM=true
+
+RUN_PY_SIM=false
+
+
+#for plotting the results
+#maybe only record the trajectroy if this is true?
+PLOT_TRAJ=false
 
 
 #another one
-NUM_PLANETS=8
+#is this the correct amount of planets???
+INITIAL_BODIES=9
