@@ -3,6 +3,10 @@ source inputs
 #echo $BASE_PY
 #echo $NUM_PLANETS
 
+
+#should define all the function names and stuff here
+#so that they can be changed all at once
+
 #currently:
 #c ~10s
 #numpy ~30s
@@ -10,6 +14,30 @@ source inputs
 
 INITIAL_COORD_FILE="source/planet_coords.txt"
 RESULTS_DIR="source/results"
+
+#empty strings for adding flags to be passed around to!
+PY_FLAGS=""
+C_FLAGS=""
+
+
+if [ $BASE_PY_SIM = true ]; then
+    PY_FLAGS="$PY_FLAGS b"
+fi
+
+if [ $NUMPY_SIM = true ]; then
+    PY_FLAGS="$PY_FLAGS n"
+fi
+
+if [ $BASE_C_SIM = true ]; then
+    C_FLAGS="$C_FLAGS b"
+fi
+
+
+
+#echo $PY_FLAGS
+    
+#may want to group c files and python files into seperate directories inside source
+#or maybe remove source as a folder??
 
 
 #may want some generic path variable that is just 'source/'
@@ -25,7 +53,6 @@ fi
 
 num_lines=$(< $INITIAL_COORD_FILE wc -l)
 
-#define the file golly gosh!
 #if the file only has 9 lines, the asteroid needs to be added
 #if the file only has the initial bodies adds the asteroid to it
 if [ $num_lines -eq $INITIAL_BODIES ]; then
@@ -57,20 +84,24 @@ if [ ! -e 'source/results' ]; then
     eval mkdir source/results
 fi
 
-if [ $RUN_PY_SIM = true ]; then
+#string is not empty
+#ie only runs the python simulation if one of the sims is being called!
+if [ -n "$PY_FLAGS" ]; then
     echo "Running basic python simulation..."
-    eval python3 source/basic_python_sim.py
+    eval python3 source/python_main.py $PY_FLAGS
     echo "Done"
 fi
 
-if [ $RUN_C_SIM = true ]; then
+
+
+if [ -n "$C_FLAGS" ]; then
     echo "Compiling basic c simulation..."
     #maybe define varibles of compiler and flags etc
-    eval gcc -Wall -o basic_c_sim source/basic_c_sim.c
-    eval mv basic_c_sim source/
+    eval gcc -Wall -o c_sim source/c_main.c
+    eval mv c_sim source/
     echo "Done"
     echo "Running basic c simulation..."
-    eval ./source/basic_c_sim
+    eval ./source/c_sim $C_FLAGS
     echo "Done"
 fi
 

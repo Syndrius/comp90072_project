@@ -1,6 +1,7 @@
 #this will be the basic file that stores the classes and the functions that are used by everything!
 import math
 from constants import * #think this is purely for G -> could be better to redefine
+import numpy as np
 
 ###dt = 0.01
 #at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
@@ -55,16 +56,9 @@ class celestial_body:
 
 #the basic simulation function, takes a list of celestial bodies
 #and the number of iterations!
-def run_simulation(solar_system, iters):
-    body1 = solar_system[0]
-    body2 = solar_system[1]
-    y_diff = body2.y - body1.y
-    x_diff = body2.x - body1.x
-    angle = math.atan2(y_diff, x_diff)
-    force = G*body1.mass*body2.mass/(x_diff**2 + y_diff**2) 
-    a1 = force/body1.mass
-    a2 = force/body2.mass
-    print(y_diff, x_diff, angle, force, a1, a2)
+def basic_sim(solar_system, iters):
+    print("Running basic simulation...")
+
     for i in range(iters):
         
         #may need to check these loops
@@ -131,3 +125,87 @@ def run_simulation(solar_system, iters):
 
 
     return solar_system 
+
+
+def numpy_sim(solar_system, iters):
+    print("Running numpy simulation...")
+    #first take the solar system object then create numpy arrays to use for the sim
+    
+    #(x,y) for each body
+    pos = np.zeros((len(solar_system), 2))
+    vel = np.zeros((len(solar_system), 2))
+    mass = np.zeros(len(solar_system))
+
+    #may need to convert vel to centre of mass if following code!
+
+    #these should be small loops just to initialise!
+
+    for i in range(len(solar_system)):
+        
+        pos[i][0] = solar_system[i].x
+        pos[i][1] = solar_system[i].y
+        
+        vel[i][0] = solar_system[i].vx
+        
+        vel[i][1] = solar_system[i].vy
+        mass[i] = solar_system[i].mass
+
+
+    #store the previous positions for plotting!
+    past_x = np.zeros((iters, len(solar_system)))
+    past_y = np.zeros((iters, len(solar_system)))
+
+
+    for i in range(iters):
+        acc = compute_a(pos, mass)
+        pos += vel*dt
+        vel += acc*dt
+
+        past_x[i] = pos[:,0]
+        past_y[i] = pos[:,1]
+
+    
+
+    #updates the original object and returns that!
+
+    for i in range(len(solar_system)):
+        solar_system[i].x = pos[i][0]
+        solar_system[i].y = pos[i][1]
+        solar_system[i].vx = vel[i][0]
+        solar_system[i].vy = vel[i][1]
+        solar_system[i].x_positions = past_x[:,i]
+        solar_system[i].y_positions = past_y[:,i]
+
+
+    return solar_system
+
+    #note this works slightly different to other sim, doesn;t use an angle!
+    #instead does (r_i - r_j)/|r_i-r_j|^3
+    #may want to swap all of them to this for consistancy!
+    #numpy has an atan2 then can be vectorised! -> use that instead!
+
+
+def compute_a(pos, mass):
+
+    #extra 'row' to create matrices for next calculation!
+    x = pos[:, 0:1]
+    y = pos[:, 1:2]
+    
+    #this creates pairwise distances between each body!
+    dx = x.T - x
+    dy = y.T - y
+    
+    
+    #need magnitude?
+    #needs a softening, I think because it is calculating the acceleration due to itself!
+    #without value it just gives nan everywhere!
+    inv_dist_cubed = (dx**2 + dy**2 + 0.000005**2)**(-1.5)
+    
+    ax = G * (dx * inv_dist_cubed) @ mass
+    ay = G * (dy * inv_dist_cubed) @ mass
+    
+    #this combines them, not certain about the final form though!
+    a = np.column_stack((ax, ay))
+
+    return a
+

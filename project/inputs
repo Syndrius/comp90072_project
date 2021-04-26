@@ -8,14 +8,22 @@
 CLEAN=false
 
 
-RUN_C_SIM=true
+BASE_C_SIM=true
 
-RUN_PY_SIM=false
+BASE_PY_SIM=false
+
+NUMPY_SIM=true
 
 
 #for plotting the results
 #maybe only record the trajectroy if this is true?
 PLOT_TRAJ=false
+
+
+#this dictates if the real solar system is used or a generic n-body problem with more 
+#bodies for comparison of methods!
+#this is a bit of a placeholder!
+REAL=true
 
 
 #another one

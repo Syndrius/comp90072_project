@@ -2,10 +2,18 @@
 #then writes out the positions of the bodies!
 
 
+#maybe constants should contain all the import files
 from constants import *
+
 import csv
-import core #terrible name -> change pls
+import python_sims #terrible name -> change pls
 import numpy_sim
+import sys
+#used for deepcopying the solar_system!
+import copy
+
+
+
 
 ###dt = 0.01
 #at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
@@ -14,7 +22,9 @@ import numpy_sim
 coord_file = 'source/' + planet_coord_file
 #format of file may need more consideration, not sure if txt file is the best bet!
 
-solar_system = []
+#coord_file must always be read I think
+#maybe this will change if we are just making an arbitrary n-body_problem
+solar_system_init = []
 with open(coord_file, 'r') as f:
         
     for line in f:
@@ -22,7 +32,7 @@ with open(coord_file, 'r') as f:
         #convert to float, may be a better way of doing this!
         coord_list = [float(i) for i in line.split()]
         #may not be the correct type, but not sure that will matter!
-        solar_system.append(core.celestial_body(*coord_list))
+        solar_system_init.append(python_sims.celestial_body(*coord_list))
 
 #may want the celestial body class defined here!!!!
 #might be best to just have two files, this one as the 'main' that reads and writes files
@@ -31,12 +41,21 @@ with open(coord_file, 'r') as f:
 #that will also prevent the solar_system object from running each time!
 
 
-#solar_system = core.run_simulation(solar_system, iters)
+#hopefully solar_system_init isnt written over!
+
+if "b" in sys.argv:
+    solar_system = python_sims.basic_sim(solar_system_init, iters)
+
+if "n" in sys.argv:
+    solar_system = python_sims.numpy_sim(solar_system_init, iters)
+
+
+
 
 #testing the numpy version
 #takes sim from ~1:20 to ~30
 #simulation looks good! woo
-solar_system = numpy_sim.run_simulation(solar_system, iters)
+#solar_system = numpy_sim.run_simulation(solar_system_init, iters)
 
 #probably make this more specific to each program, eg body1_basic_py etc
 #files to output results to!
