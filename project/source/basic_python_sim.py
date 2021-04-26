@@ -5,7 +5,7 @@
 from constants import *
 import csv
 import core #terrible name -> change pls
-
+import numpy_sim
 
 ###dt = 0.01
 #at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
@@ -24,11 +24,19 @@ with open(coord_file, 'r') as f:
         #may not be the correct type, but not sure that will matter!
         solar_system.append(core.celestial_body(*coord_list))
 
+#may want the celestial body class defined here!!!!
+#might be best to just have two files, this one as the 'main' that reads and writes files
+#and controls which sims are done
+#then the simulation file which just contains function for each sim
+#that will also prevent the solar_system object from running each time!
 
 
+#solar_system = core.run_simulation(solar_system, iters)
 
-solar_system = core.run_simulation(solar_system, iters)
-
+#testing the numpy version
+#takes sim from ~1:20 to ~30
+#simulation looks good! woo
+solar_system = numpy_sim.run_simulation(solar_system, iters)
 
 #probably make this more specific to each program, eg body1_basic_py etc
 #files to output results to!

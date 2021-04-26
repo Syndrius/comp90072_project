@@ -3,6 +3,10 @@ source inputs
 #echo $BASE_PY
 #echo $NUM_PLANETS
 
+#currently:
+#c ~10s
+#numpy ~30s
+#base_python ~80s
 
 INITIAL_COORD_FILE="source/planet_coords.txt"
 RESULTS_DIR="source/results"
