@@ -12,12 +12,12 @@ BASE_C_SIM=true
 
 BASE_PY_SIM=false
 
-NUMPY_SIM=true
+NUMPY_SIM=false
 
 
 #for plotting the results
 #maybe only record the trajectroy if this is true?
-PLOT_TRAJ=false
+PLOT_TRAJ=true
 
 
 #this dictates if the real solar system is used or a generic n-body problem with more 

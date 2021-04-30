@@ -97,7 +97,7 @@ fi
 if [ -n "$C_FLAGS" ]; then
     echo "Compiling basic c simulation..."
     #maybe define varibles of compiler and flags etc
-    eval gcc -Wall -o c_sim source/c_main.c
+    eval gcc -Wall -o c_sim source/c_main.c source/c_sims.c
     eval mv c_sim source/
     echo "Done"
     echo "Running basic c simulation..."
@@ -111,7 +111,7 @@ fi
 #maybe need a guard to check the results directory isn't empty!
 if [ $PLOT_TRAJ = true ]; then
     #checks there are some results to plot
-    if [ ! -f $RESULTS_DIR"/data_body_0.txt" ]; then
+    if [ ! -f $RESULTS_DIR"/data.txt" ]; then
         echo "No data found, please run one of the simulations."
     else
         echo "Plotting the trajectories..."

@@ -17,9 +17,6 @@ class celestial_body:
         self.x = x
         self.y = y
 
-        self.x_positions = [x]
-        self.y_positions = [y]
-
         #initial x and y velocity coordinates of the celestial body
         self.vx = vx
         self.vy = vy
@@ -44,8 +41,6 @@ class celestial_body:
     def update_position(self, dt):
         self.x += self.vx*dt
         self.y += self.vy*dt
-        self.x_positions.append(self.x)
-        self.y_positions.append(self.y)
 
     #reset the acceleration between iterations
     def reset_acceleration(self):
@@ -58,6 +53,8 @@ class celestial_body:
 #and the number of iterations!
 def basic_sim(solar_system, iters):
     print("Running basic simulation...")
+
+    pos_history = []
 
     for i in range(iters):
         
@@ -115,16 +112,19 @@ def basic_sim(solar_system, iters):
                 #Earth.ay = force/Earth.mass*math.sin(angle)
 
                 #print('Earth acceleration:', Earth.ax, Earth.ay)
-
+        temp_list = []
         for body in solar_system:
             #print(body.x, body.ax)
             #print(body.y, body.ay)
             body.update_position(dt)
             body.update_velocity(dt)
             body.reset_acceleration()
+            temp_list.append(body.x)
+            temp_list.append(body.y)
 
+        pos_history.append(temp_list)
 
-    return solar_system 
+    return solar_system, pos_history
 
 
 def numpy_sim(solar_system, iters):
@@ -154,7 +154,8 @@ def numpy_sim(solar_system, iters):
     #store the previous positions for plotting!
     past_x = np.zeros((iters, len(solar_system)))
     past_y = np.zeros((iters, len(solar_system)))
-
+    
+    pos_history = np.zeros((iters, 2*len(solar_system)))
 
     for i in range(iters):
         acc = compute_a(pos, mass)
@@ -163,6 +164,7 @@ def numpy_sim(solar_system, iters):
 
         past_x[i] = pos[:,0]
         past_y[i] = pos[:,1]
+        pos_history[i] = pos.flatten()
 
     
 
@@ -177,7 +179,7 @@ def numpy_sim(solar_system, iters):
         solar_system[i].y_positions = past_y[:,i]
 
 
-    return solar_system
+    return solar_system, pos_history
 
     #note this works slightly different to other sim, doesn;t use an angle!
     #instead does (r_i - r_j)/|r_i-r_j|^3

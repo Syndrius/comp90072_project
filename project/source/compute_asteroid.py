@@ -1,6 +1,8 @@
 
 #this file works as intended atm
 #bash script treats this properly, shouldn't need to be called again lol!
+#this file is outdated big time!
+#maybe fix this when the fastest sim is done, so that this can be done quickly!
 
 
 import math

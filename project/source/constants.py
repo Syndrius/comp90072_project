@@ -1,4 +1,5 @@
 #this file's purpose is unclear atm, different files are reading different things from this 
+#really dont like this file! -> bash should probably pass this around I think!
 
 
 num_bodies = 10
@@ -20,6 +21,7 @@ planet_coord_file = 'planet_coords.txt'
 bodies = ['Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
 
 
+#THIS IS STUPID, WHY STORE MASSES IN UNITS THAT DON"T WORK!
 body_properties = {'Sun': (1.988e30, 6.955e5),
             'Mercury': (3.301e23, 2440.),
             'Venus': (4.867e+24, 6052.),

@@ -1,6 +1,14 @@
 #this file is quite slow, probably because of the large file reading??
 #but shouldn't need to be called much so doesn't matter
 #takes ~ 1min
+#new plotting method works for python, need to change c!
+
+#TODO
+#add planets to ends of plots
+#make this work for different amount of bodies
+#clean up
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from constants import *
@@ -11,19 +19,27 @@ from matplotlib import colors
 #will need a list of this, for each file, think the bash script needs to create this files!
 coord_file_base = 'source/results/data_body_'
 
+#only one file for now, may want to change the name!
+input_file = "source/results/data.txt"
 
 #colours for Sun, mercury, venus, earth, mars, jupiter, saturn, neptune, uranus, asteroid
 colours = ['darkorange', 'grey', 'linen', 'forestgreen', 'red', 'wheat', 'goldenrod', 'lightcyan', 'royalblue', 'sienna']
 
 
+#need .T because it reads it in a stupid way!
+data = np.loadtxt(input_file, delimiter=' ').T
+
 #will need to be very careful with the num_bodies here, its purpose
 #as a constant is not super clear!
+#dont like this itterable, not adjustable for more bods
 for i in range(num_bodies):
-    input_file_str = coord_file_base + str(i) + '.txt'
+    #input_file_str = coord_file_base + str(i) + '.txt'
     #x = []
     #y = []
     #input_file = open(input_file_str, 'r')
-    x, y = np.loadtxt(input_file_str, delimiter=' ', unpack=True)
+    #x, y = np.loadtxt(input_file_str, delimiter=' ', unpack=True)
+    x = data[2*i]
+    y = data[2*i+1]
     #with open(input_file_str, 'r') as filein:
         #reader = csv.reader(filein, delimiter=' ')
         #print(*reader)
@@ -46,6 +62,7 @@ for i in range(num_bodies):
     val = 400000
     al = 0.02
     #looks pretty good, maybe could be brighter at the ends
+
     #also want to add spheres to end
     #also plot two figures with different zooms
     while al < 0.95:
