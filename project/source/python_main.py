@@ -12,7 +12,11 @@ import sys
 import numpy as np
 #used for deepcopying the solar_system!
 import copy
+import time
 
+
+times = []
+init_time = time.perf_counter()
 
 
 
@@ -41,28 +45,60 @@ with open(coord_file, 'r') as f:
 #then the simulation file which just contains function for each sim
 #that will also prevent the solar_system object from running each time!
 
+#records the time taken for the file to be read in
+times.append(time.perf_counter()-init_time)
+
 #writes the position history to the given file
+#do I need to split this up considering I am comparing these times??
 def write_to_file(file_name, positions):
     np.savetxt(file_name, positions)
 
 
 
+time_file = "source/results/time.txt"
+#this will change 
+times_recorded = 6
+
+def write_time(label, times):
+    with open(time_file, "a") as f:
+        print(*times, label, file=f)
+        #for i in range(times_recorded):
+        #    print(times[i], file=f)
+        #print(label, file=f)
+        #np.savetxt(f, *times, fmt="%s", newline=" ") 
+        #np.savetxt(f, "\n")
+
 #hopefully solar_system_init isnt written over!
 
 if "b" in sys.argv:
-    solar_system, pos_history = python_sims.basic_sim(solar_system_init, iters)
+    #resets the init time
+    init_time = time.perf_counter()
+    solar_system, pos_history, b_sim_times = python_sims.basic_sim(solar_system_init, iters, init_time)
     #want some kind of path variable
     #keep these the same for now, having multiple doesn't help!
+    b_time = times + b_sim_times
     output_file = "source/results/data.txt"
     pos_history = np.array(pos_history)
     write_to_file(output_file, pos_history)
+    #records time taken to write data
+    b_time.append(time.perf_counter()-init_time)
+    #label pb = python basic
+    write_time('pb', b_time)
 
 
 if "n" in sys.argv:
-    solar_system, pos_history = python_sims.numpy_sim(solar_system_init, iters)
+    #resets the init time
+    init_time = time.perf_counter()
+    solar_system, pos_history, n_sim_times = python_sims.numpy_sim(solar_system_init, iters, init_time)
+    n_time = times + n_sim_times
     #want some kind of path variable
     output_file = "source/results/data.txt"
     write_to_file(output_file, pos_history)
+    #records time taken to write data
+    n_time.append(time.perf_counter()-init_time)
+    #label pn = python numpy
+    write_time('pn', n_time)
+
 
 
 #just have a write_to_file here, as they should all write to same place

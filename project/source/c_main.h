@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 // check this is the correct size!
 //will want to read all this in soon!
@@ -10,6 +11,8 @@
 #define MAX_BODIES 10
 #define G 2.96*pow(10, -4)
 #define DT 0.01
+//may need to change
+#define TIMES_RECORDED 6
 
 typedef struct {
     long double x;
@@ -21,6 +24,17 @@ typedef struct {
     long double radius; //not sure this is needed yet!
     long double mass;
 } body_t;
+
+
+// stores the array of the times
+// this works as intended but time only goes to seconds!
+//need to use something else
+typedef struct {
+    struct timeval start;
+    struct timeval stop;
+    float times[TIMES_RECORDED];
+    int recorded;
+} timer_t;
 
 // not sure if this is good, may be better to just have an array of the bodies??
 // as there will always be MAX_BODIES in there
@@ -34,6 +48,6 @@ typedef struct {
 
 
 void read_solar_system(FILE *fp, solar_system_t *ss);
-void simulation(solar_system_t *ss, long double** pos_history);
+void simulation(solar_system_t *ss, long double** pos_historyi, timer_t *timer);
 void update_bodies(solar_system_t *ss, long double *pos_history);
-
+float timedifference_msec(struct timeval t0, struct timeval t1);

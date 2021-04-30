@@ -33,16 +33,25 @@ void read_solar_system(FILE *fp, solar_system_t *ss) {
 }
 
 // change this to return array of doubles
-void simulation(solar_system_t *ss, long double **pos_history) {
+void simulation(solar_system_t *ss, long double **pos_history, timer_t *timer) {
     int i, j, k;
     long double y_diff, x_diff;
     long double angle, a1, a2, force;
+    time_t seconds;
     body_t *body1, *body2;
     printf("made it to sim\n");   
 
+
     for (i=0;i<ITERS;i++) {
+
+        if ((i == ITERS/5 * 1) || (i == ITERS/5 * 2) || (i == ITERS/5 * 3) || (i == ITERS/5 * 4)) {
+            gettimeofday(&timer->stop);
+            timer->times[timer->recorded] = timedifference_msec(timer->start, timer->stop);
+            timer->recorded += 1;
+        }
+            
        
-       for (j=0;j<ss->num_bodies;j++) {
+        for (j=0;j<ss->num_bodies;j++) {
             body1 = &ss->bodies[j];
 
             for (k=j+1; k<ss->num_bodies;k++) {
@@ -103,4 +112,11 @@ void update_bodies(solar_system_t *ss, long double *pos_history) {
         pos_history[2*i+1] = ss->bodies[i].y;
         //printf("added to array\n");
     }
+}
+
+
+// this is defined twice which is no good
+float timedifference_msec(struct timeval t0, struct timeval t1)
+{
+    return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
 }

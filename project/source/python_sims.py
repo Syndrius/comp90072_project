@@ -3,6 +3,9 @@ import math
 from constants import * #think this is purely for G -> could be better to redefine
 import numpy as np
 
+#shouldn't be doing this here!
+import time
+
 ###dt = 0.01
 #at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
 
@@ -51,12 +54,22 @@ class celestial_body:
 
 #the basic simulation function, takes a list of celestial bodies
 #and the number of iterations!
-def basic_sim(solar_system, iters):
+def basic_sim(solar_system, iters, init_time):
     print("Running basic simulation...")
 
     pos_history = []
 
+    time_checks = []
+    times = []
+    #no good atm 
+    #needs to be changed
+    for i in range(1, 5):
+        time_checks.append(int(iters/5*i))
+
     for i in range(iters):
+
+        if i in time_checks:
+           times.append(time.perf_counter()-init_time) 
         
         #may need to check these loops
         #these get the acceleration of each body from all the other ones!
@@ -124,10 +137,10 @@ def basic_sim(solar_system, iters):
 
         pos_history.append(temp_list)
 
-    return solar_system, pos_history
+    return solar_system, pos_history, times
 
 
-def numpy_sim(solar_system, iters):
+def numpy_sim(solar_system, iters, init_time):
     print("Running numpy simulation...")
     #first take the solar system object then create numpy arrays to use for the sim
     
@@ -136,12 +149,21 @@ def numpy_sim(solar_system, iters):
     vel = np.zeros((len(solar_system), 2))
     mass = np.zeros(len(solar_system))
 
+    time_checks = []
+    times = []
+    #no good atm 
+    #needs to be changed
+    #may be better for this to be passed in
+    for i in range(1, 5):
+        time_checks.append(int(iters/5*i))
+
+
     #may need to convert vel to centre of mass if following code!
 
     #these should be small loops just to initialise!
 
     for i in range(len(solar_system)):
-        
+ 
         pos[i][0] = solar_system[i].x
         pos[i][1] = solar_system[i].y
         
@@ -158,6 +180,12 @@ def numpy_sim(solar_system, iters):
     pos_history = np.zeros((iters, 2*len(solar_system)))
 
     for i in range(iters):
+
+        if i in time_checks:
+           times.append(time.perf_counter()-init_time) 
+        
+
+
         acc = compute_a(pos, mass)
         pos += vel*dt
         vel += acc*dt
@@ -179,7 +207,7 @@ def numpy_sim(solar_system, iters):
         solar_system[i].y_positions = past_y[:,i]
 
 
-    return solar_system, pos_history
+    return solar_system, pos_history, times
 
     #note this works slightly different to other sim, doesn;t use an angle!
     #instead does (r_i - r_j)/|r_i-r_j|^3

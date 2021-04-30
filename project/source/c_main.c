@@ -13,8 +13,16 @@ int main(int argc, char *argv[]) {
     //creates the main solar_system struct
     solar_system_t ss;
 
+
+    //probs want a function that initialises all these structs
     ss.num_bodies = 0;
     ss.iters_complete = 0;
+
+    timer_t timer;
+    //should be getting the initial time
+    gettimeofday(&timer.start);
+    timer.recorded = 0;
+    // this value may need to change
 
 
     fp = fopen("source/planet_coords.txt", "r");
@@ -26,6 +34,13 @@ int main(int argc, char *argv[]) {
 
     fclose(fp);
 
+    //this wont work to well for multiple c funcs, 
+    // will need to create multiple timer objs
+    gettimeofday(&timer.stop);
+    timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
+    timer.recorded += 1;
+    
+
     // 2 for x, y
     pos_history = malloc(ITERS * sizeof(*pos_history));
     int i, j;
@@ -36,14 +51,14 @@ int main(int argc, char *argv[]) {
     }
     //printf("got to here\n");   
     //runs the simulation
-    simulation(&ss, pos_history);
-    printf("got to here\n");   
-    printf("%.15Lf\n", pos_history[100][0]);
+    simulation(&ss, pos_history, &timer);
+    //printf("got to here\n");   
+    //printf("%.15Lf\n", pos_history[100][0]);
     char output_file[] = "source/results/data.txt";
-
+    /*
     for (i=0;i<2*ss.num_bodies;i++) {
         printf("%.15Lf\n", pos_history[0][i]);
-    }
+    }*/
     //This ensures the file is empty before appending to it
     fp = fopen(output_file, "w");
     fclose(fp);
@@ -56,6 +71,8 @@ int main(int argc, char *argv[]) {
             if (j==2*ss.num_bodies-1) {
                 fprintf(fp, "%.15Lf", pos_history[i][j]);
             }
+            //this is to deal with the need for whitespace
+            // but don't want whitespace at the end!
             else {
                 fprintf(fp, "%.15Lf ", pos_history[i][j]);
             }
@@ -66,6 +83,28 @@ int main(int argc, char *argv[]) {
     }
     
     fclose(fp);
+    
+    //this works, gettimeofday may be outdated tho!
+    gettimeofday(&timer.stop);
+    timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
+    timer.recorded += 1;
+
+    //may be wrong name!
+    char time_file[] = "source/results/time.txt";
+
+    // bash deletes file contents so always append
+    //really need file protection for all of this
+    fp = fopen(time_file, "a");
+
+
+    for (i=0;i<timer.recorded;i++) {
+        fprintf(fp, "%f ", timer.times[i]/1000);
+    }
+    fprintf(fp, "c\n");
+    fclose(fp);
+    
+
+
 
     /*
     int j, k;

@@ -32,7 +32,8 @@ if [ $BASE_C_SIM = true ]; then
     C_FLAGS="$C_FLAGS b"
 fi
 
-
+#wont always want to do this, but good for now!
+eval rm source/results/time.txt
 
 #echo $PY_FLAGS
     

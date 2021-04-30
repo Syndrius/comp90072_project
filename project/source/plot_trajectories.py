@@ -3,6 +3,11 @@
 #takes ~ 1min
 #new plotting method works for python, need to change c!
 
+#not sure if this should do all of the plotting!
+#could just pass command line args again
+#probably dont want to create too many more files!
+#create one for now, and can combine them later!
+
 #TODO
 #add planets to ends of plots
 #make this work for different amount of bodies
