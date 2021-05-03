@@ -137,6 +137,8 @@ def basic_sim(solar_system, iters, init_time):
 
         pos_history.append(temp_list)
 
+    #time that sim is complete
+    times.append(time.perf_counter()-init_time) 
     return solar_system, pos_history, times
 
 
@@ -206,6 +208,8 @@ def numpy_sim(solar_system, iters, init_time):
         solar_system[i].x_positions = past_x[:,i]
         solar_system[i].y_positions = past_y[:,i]
 
+    #time that sim is complete
+    times.append(time.perf_counter()-init_time) 
 
     return solar_system, pos_history, times
 

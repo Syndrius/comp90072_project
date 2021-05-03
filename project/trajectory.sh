@@ -7,6 +7,9 @@ source inputs
 #should define all the function names and stuff here
 #so that they can be changed all at once
 
+
+#may want to convert strings to lower etc for generic input
+
 #currently:
 #c ~10s
 #numpy ~30s
@@ -94,7 +97,7 @@ if [ -n "$PY_FLAGS" ]; then
 fi
 
 
-
+#maybe shouldn't compile everytime??
 if [ -n "$C_FLAGS" ]; then
     echo "Compiling basic c simulation..."
     #maybe define varibles of compiler and flags etc
@@ -119,4 +122,9 @@ if [ $PLOT_TRAJ = true ]; then
         eval python3 source/plot_trajectories.py
         echo "Done"
     fi
+fi
+
+
+if [ $PLOT_TIMES = true ]; then
+    eval python3 source/plot_times.py
 fi

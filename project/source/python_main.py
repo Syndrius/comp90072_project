@@ -18,6 +18,8 @@ import time
 times = []
 init_time = time.perf_counter()
 
+#sets the start time to be zero
+times.append(0)
 
 
 ###dt = 0.01
@@ -30,6 +32,8 @@ coord_file = 'source/' + planet_coord_file
 #coord_file must always be read I think
 #maybe this will change if we are just making an arbitrary n-body_problem
 solar_system_init = []
+#probably can do this with numpy.loadtxt
+#should define these function is the sim or create new file just for helper functions
 with open(coord_file, 'r') as f:
         
     for line in f:
@@ -57,7 +61,7 @@ def write_to_file(file_name, positions):
 
 time_file = "source/results/time.txt"
 #this will change 
-times_recorded = 6
+times_recorded = 7
 
 def write_time(label, times):
     with open(time_file, "a") as f:

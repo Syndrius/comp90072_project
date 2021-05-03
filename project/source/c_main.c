@@ -23,7 +23,10 @@ int main(int argc, char *argv[]) {
     gettimeofday(&timer.start);
     timer.recorded = 0;
     // this value may need to change
-
+    // sets the intial time
+    timer.times[timer.recorded] = 0;
+    timer.recorded += 1;
+ 
 
     fp = fopen("source/planet_coords.txt", "r");
     
@@ -52,6 +55,12 @@ int main(int argc, char *argv[]) {
     //printf("got to here\n");   
     //runs the simulation
     simulation(&ss, pos_history, &timer);
+    
+    //gets the time after the sim is complete
+    gettimeofday(&timer.stop);
+    timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
+    timer.recorded += 1;
+ 
     //printf("got to here\n");   
     //printf("%.15Lf\n", pos_history[100][0]);
     char output_file[] = "source/results/data.txt";

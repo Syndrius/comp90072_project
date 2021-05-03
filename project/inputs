@@ -20,6 +20,9 @@ NUMPY_SIM=true
 PLOT_TRAJ=false
 
 
+PLOT_TIMES=true
+
+
 #this dictates if the real solar system is used or a generic n-body problem with more 
 #bodies for comparison of methods!
 #this is a bit of a placeholder!

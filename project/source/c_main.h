@@ -12,7 +12,7 @@
 #define G 2.96*pow(10, -4)
 #define DT 0.01
 //may need to change
-#define TIMES_RECORDED 6
+#define TIMES_RECORDED 8
 
 typedef struct {
     long double x;
