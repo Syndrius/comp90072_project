@@ -14,13 +14,21 @@ int main(int argc, char *argv[]) {
     solar_system_t ss;
 
 
+    //probabaly want a guard for this!
+    char *coord_file = argv[1];
+    int iters = atoi(argv[2]);
+
+    printf("%d\n", iters);
+
+
     //probs want a function that initialises all these structs
     ss.num_bodies = 0;
     ss.iters_complete = 0;
+    ss.max_iters = iters;
 
     timer_t timer;
     //should be getting the initial time
-    gettimeofday(&timer.start);
+    gettimeofday(&timer.start, NULL);
     timer.recorded = 0;
     // this value may need to change
     // sets the intial time
@@ -28,7 +36,7 @@ int main(int argc, char *argv[]) {
     timer.recorded += 1;
  
 
-    fp = fopen("source/planet_coords.txt", "r");
+    fp = fopen(coord_file, "r");
     
     //probably should have a file error guard here!
     
@@ -37,17 +45,18 @@ int main(int argc, char *argv[]) {
 
     fclose(fp);
 
+
     //this wont work to well for multiple c funcs, 
     // will need to create multiple timer objs
-    gettimeofday(&timer.stop);
+    gettimeofday(&timer.stop, NULL);
     timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
     timer.recorded += 1;
     
 
     // 2 for x, y
-    pos_history = malloc(ITERS * sizeof(*pos_history));
+    pos_history = malloc(ss.max_iters * sizeof(*pos_history));
     int i, j;
-    for (i=0;i<ITERS;i++) {
+    for (i=0;i<ss.max_iters;i++) {
         // creates the memory for each inner array, 2 is for 2 coords for each body
         // could be worth defining a vec type that stores two long doubles
         pos_history[i] = malloc(2*ss.num_bodies*sizeof(**pos_history));
@@ -57,7 +66,7 @@ int main(int argc, char *argv[]) {
     simulation(&ss, pos_history, &timer);
     
     //gets the time after the sim is complete
-    gettimeofday(&timer.stop);
+    gettimeofday(&timer.stop, NULL);
     timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
     timer.recorded += 1;
  
@@ -75,7 +84,7 @@ int main(int argc, char *argv[]) {
 
     //fwrite(pos_history[2], sizeof(**pos_history), 2*ss.num_bodies, fp);
     //this is terrible but it works
-    for (i=0;i<ITERS;i++) {
+    for (i=0;i<ss.max_iters;i++) {
         for (j=0;j<2*ss.num_bodies;j++) {
             if (j==2*ss.num_bodies-1) {
                 fprintf(fp, "%.15Lf", pos_history[i][j]);
@@ -94,7 +103,7 @@ int main(int argc, char *argv[]) {
     fclose(fp);
     
     //this works, gettimeofday may be outdated tho!
-    gettimeofday(&timer.stop);
+    gettimeofday(&timer.stop, NULL);
     timer.times[timer.recorded] = timedifference_msec(timer.start, timer.stop);
     timer.recorded += 1;
 

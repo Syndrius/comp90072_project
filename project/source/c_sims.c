@@ -24,8 +24,8 @@ void read_solar_system(FILE *fp, solar_system_t *ss) {
         //need to use malloc for this
         // allocating memory in struct doesn't have enough space
         // malloc puts the memory somewhere else
-        //ss->bodies[ss->num_bodies].x_positions = malloc(ITERS*sizeof(long double));
-        //ss->bodies[ss->num_bodies].y_positions = malloc(ITERS*sizeof(long double));
+        //ss->bodies[ss->num_bodies].x_positions = malloc(ss->max_iters*sizeof(long double));
+        //ss->bodies[ss->num_bodies].y_positions = malloc(ss->max_iters*sizeof(long double));
         //ss->bodies[ss->num_bodies].x_positions[0] = ss->bodies[ss->num_bodies].x;
         //ss->bodies[ss->num_bodies].y_positions[0] = ss->bodies[ss->num_bodies].y;
         ss->num_bodies += 1;
@@ -42,10 +42,10 @@ void simulation(solar_system_t *ss, long double **pos_history, timer_t *timer) {
     printf("made it to sim\n");   
 
 
-    for (i=0;i<ITERS;i++) {
+    for (i=0;i<ss->max_iters;i++) {
 
-        if ((i == ITERS/5 * 1) || (i == ITERS/5 * 2) || (i == ITERS/5 * 3) || (i == ITERS/5 * 4)) {
-            gettimeofday(&timer->stop);
+        if ((i == ss->max_iters/5 * 1) || (i == ss->max_iters/5 * 2) || (i == ss->max_iters/5 * 3) || (i == ss->max_iters/5 * 4)) {
+            gettimeofday(&timer->stop, NULL);
             timer->times[timer->recorded] = timedifference_msec(timer->start, timer->stop);
             timer->recorded += 1;
         }

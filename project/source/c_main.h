@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 
 // check this is the correct size!
 //will want to read all this in soon!
@@ -44,6 +45,7 @@ typedef struct {
     int iters_complete;
     body_t bodies[MAX_BODIES];
     int num_bodies;
+    int max_iters;
 } solar_system_t;
 
 

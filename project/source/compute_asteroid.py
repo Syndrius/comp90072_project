@@ -1,62 +1,104 @@
 
 #this file works as intended atm
-#bash script treats this properly, shouldn't need to be called again lol!
-#this file is outdated big time!
-#maybe fix this when the fastest sim is done, so that this can be done quickly!
+#This file finds the initial coordiantes of an asteroid that will collide with Earth
+#It runs the simulation, then creates and asteroid at Earths location, then runs
+#the sim backwards to get the asteroids initial conditions.
 
 
-import math
-from constants import *
+import math #dont think this is needed!
 #import csv #dont think this is required
-import core 
+#import python_sims 
+import sys
+import numpy as np
 
-#coord_file = 'source/planet_coordinates.txt'
-coord_file = 'source/' + planet_coord_file
-#format of file may need more consideration, not sure if txt file is the best bet!
+#need to stop defining these everywhere
+G = 2.96*10**(-4)
+dt = 0.01
+
+#reads the command line arguements to get the file to use and the number of iterations
+coord_file = sys.argv[1]
+iters = int(sys.argv[2])
 
 
-solar_system = []
-with open(coord_file, 'r') as f:
-        
-    for line in f:
-        #convert to float, may be a better way of doing this!
-        coord_list = [float(i) for i in line.split()]
-        #may not be the correct type, but not sure that will matter!
-        solar_system.append(core.celestial_body(*coord_list))
+#basic version of the numpy sim 
+def sim(ss, iters):
 
+    for i in range(iters):
+
+        #gets the acceleration of each body
+        ax, ay = compute_a(ss)
+        #updates the x and y of each body
+        ss[0] += ss[2]*dt
+        ss[1] += ss[3]*dt
+        #updates the vx and vy of each body
+        ss[2] += ax*dt
+        ss[3] += ay*dt
+
+    return ss
+
+#computes the acceleration of each body for the sim function
+def compute_a(ss):
+
+    #extra 'row' to create matrices for next calculation!
+    x = ss[0:1]
+    y = ss[1:2]
+    mass = ss[4]
+    
+    #this creates pairwise distances between each body!
+    dx = x.T - x
+    dy = y.T - y
+    
+    #needs a softening, I think because it is calculating the acceleration due to itself!
+    #without value it just gives nan everywhere!
+    inv_dist_cubed = (dx**2 + dy**2 + 0.000005**2)**(-1.5)
+    
+    ax = -G * (dx * inv_dist_cubed) @ mass
+    ay = -G * (dy * inv_dist_cubed) @ mass
+
+    return ax, ay
+
+
+#reads the initial coordinates of the other planets
+ss = np.loadtxt(coord_file).T
 
 
 #runs the simulation once, to find the 'final positions' of the bodies
-solar_system = core.run_simulation(solar_system, iters)
-
+ss = sim(ss, iters)
 
    
 #reverses the direction of the bodies in the solar system
 #so the simulation can be run backwards!
-for i in solar_system:
-    i.vx = -i.vx
-    i.vy = -i.vy
-    i.x_positions = [i.x]
-    i.y_positions = [i.y]
+ss[2] =-ss[2]
+ss[3] =-ss[3]
 
 
-#arbitrary choice for the asteroid's properties
-#may want to include these inside constants.py later
-asteroid_rad = 0.00005 #no idea what this is, may need to check it makes sense!
-asteroid_mass = 10**(-20) #small mass so it has neglible effects on the rest of the solar system!
-#will eventually want a radius for the asteroid and make it a bit more realistic!
-#initial velocity components chosen through trial and error!
-asteroid = core.celestial_body(solar_system[3].x+20*solar_system[3].radius, solar_system[3].y+20*solar_system[3].radius, 0.025, -0.008, asteroid_rad, asteroid_mass)
+#creates a larger ss so the asteroid can fit, and adds the old values in
+ss_ast = np.zeros((ss.shape[0], ss.shape[1]+1))
 
-solar_system.append(asteroid)
-
-#this is not super efficient as it treats the effect of the asteroid on the other planets 
-#as non-zero
-solar_system = core.run_simulation(solar_system, iters)
+for i in range(5):
+    ss_ast[i][:-1] = ss[i]
 
 
+#add the asteroid in
+#slightly offset asteroid from earth to prevent overflow
+ss_ast[0][-1] = ss[0][3] + 0.00085 #sets x pos as same as Earths
+ss_ast[1][-1] = ss[1][3] + 0.00085 #sets y coord
+#random velcity for ast
+ss_ast[2][-1] = 0.025
+ss_ast[3][-1] = - 0.008
 
+#sets mass to be very low, such that the asteroid wont have any effect on the other planets
+ss_ast[4][-1] = 10**(-20)
+
+
+#runs the sim backwards 
+ss = sim(ss_ast, iters)
+
+#reverses the asteroid trajectory so that it will be heading towards Earth
+ss_ast[2][-1] = -ss_ast[2][-1]
+ss_ast[3][-1] = -ss_ast[3][-1]
+
+#appends the asteroids initial coordinates to the file
 with open(coord_file, 'a') as f:
-    f.write('{} {} {} {} {} {} \n'.format(solar_system[-1].x, solar_system[-1].y, -solar_system[-1].vx, -solar_system[-1].vy, solar_system[-1].radius, solar_system[-1].mass))
-
+    np.savetxt(f, ss_ast[:,-1], newline=" ")
 

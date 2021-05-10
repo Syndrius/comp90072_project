@@ -1,12 +1,20 @@
-#echo $1
+#NEEDS WORK
+
+#TODO
+#implement read and write for different types
+#may have to ignore file reading and writing for Multi
+#
+#Fix base c alg for new ss structure -> files will need to be read differently
+#
+#add multiprocessing for c
+#
+#add gpu for python
+#
+#tidy up plotting
+#
+#clean up all the funcs
+
 source inputs
-#echo $BASE_PY
-#echo $NUM_PLANETS
-
-
-#should define all the function names and stuff here
-#so that they can be changed all at once
-
 
 #may want to convert strings to lower etc for generic input
 
@@ -15,13 +23,38 @@ source inputs
 #numpy ~30s
 #base_python ~80s
 
-INITIAL_COORD_FILE="source/planet_coords.txt"
-RESULTS_DIR="source/results"
 
 #empty strings for adding flags to be passed around to!
 PY_FLAGS=""
 C_FLAGS=""
 
+#can do this over a loop to see how they run with variable number of bodies!
+NUM_BODIES=1000
+
+RESULTS_DIR="source/results"
+
+#this determines what type of initial coords are generated!
+if [ $REAL = true ]; then
+    #want to be able to choose this/have two options depending on real planets or fake
+    ITERS=500000
+    INITIAL_COORD_FILE="source/real_planet_coords.txt"
+    FLAGS="$INITIAL_COORD_FILE $ITERS"
+    #gets the initial coord file then generates the asteroid!
+    if [ ! -f $INITIAL_COORD_FILE ]; then
+        eval python3 source/get_planet_coords.py "Real"
+        eval python3 source/compute_asteroid.py $FLAGS
+    fi
+else
+    ITERS=10000
+    INITIAL_COORD_FILE="source/fake_planet_coords.txt"
+    FLAGS="$INITIAL_COORD_FILE $ITERS"
+    if [ ! -f $INITIAL_COORD_FILE ]; then
+        eval python3 source/get_planet_coords.py "Fake" $NUM_BODIES
+    fi
+fi
+
+#can check size of coord file to see if it needs to be remade
+#probabaly have plot_traj always false unless real=true
 
 if [ $BASE_PY_SIM = true ]; then
     PY_FLAGS="$PY_FLAGS b"
@@ -31,39 +64,17 @@ if [ $NUMPY_SIM = true ]; then
     PY_FLAGS="$PY_FLAGS n"
 fi
 
+if [ $MULTI_PY_SIM = true ]; then
+    PY_FLAGS="$PY_FLAGS m"
+fi
+
+
 if [ $BASE_C_SIM = true ]; then
     C_FLAGS="$C_FLAGS b"
 fi
 
 #wont always want to do this, but good for now!
 eval rm source/results/time.txt
-
-#echo $PY_FLAGS
-    
-#may want to group c files and python files into seperate directories inside source
-#or maybe remove source as a folder??
-
-
-#may want some generic path variable that is just 'source/'
-
-#only gets the planet coords if they don't already exist
-#assumes they wont be changed often!
-#file name shouldn't be written here, this will need acces to constants
-#structure may have to change once c comes into it!
-#maybe should pass the file name in as a command line argument
-if [ ! -f $INITIAL_COORD_FILE ]; then
-    eval python3 source/get_planet_coords.py
-fi
-
-num_lines=$(< $INITIAL_COORD_FILE wc -l)
-
-#if the file only has 9 lines, the asteroid needs to be added
-#if the file only has the initial bodies adds the asteroid to it
-if [ $num_lines -eq $INITIAL_BODIES ]; then
-    #this file should be improved with numpy etc
-   echo "Computing the asteroids initial conditions..."
-   eval python3 source/compute_asteroid.py
-fi
 
 #want to add in conditions to maybe delete resutls folder
 #maybe to make sure the directory exists for now:
@@ -78,12 +89,9 @@ if [ $CLEAN = true ]; then
     #eval rm source/planet_coords.txt
 fi
 
-#start mucking around with deleting stuff once I have a git backup lol!
 
-#currently all the files need the path into the files which is very messy
-#need a better way of storing the path to the files
-#maybe have some base $path variable like amrex!
 #creates the results directory if it does not exist!
+#this should probably have the RESULT_DIR variable
 if [ ! -e 'source/results' ]; then
     eval mkdir source/results
 fi
@@ -91,22 +99,23 @@ fi
 #string is not empty
 #ie only runs the python simulation if one of the sims is being called!
 if [ -n "$PY_FLAGS" ]; then
-    echo "Running basic python simulation..."
-    eval python3 source/python_main.py $PY_FLAGS
-    echo "Done"
+    echo "Running python simulations..."
+    eval python3 source/python_main.py $FLAGS $PY_FLAGS
+    echo "Finished python simulations."
 fi
 
 
 #maybe shouldn't compile everytime??
 if [ -n "$C_FLAGS" ]; then
-    echo "Compiling basic c simulation..."
+    echo "Compiling c simulations..."
     #maybe define varibles of compiler and flags etc
     eval gcc -Wall -o c_sim source/c_main.c source/c_sims.c
+    #this is to ensure file are in right spot and can read other files!
     eval mv c_sim source/
     echo "Done"
-    echo "Running basic c simulation..."
-    eval ./source/c_sim $C_FLAGS
-    echo "Done"
+    echo "Running basic c simulations..."
+    eval ./source/c_sim $FLAGS $C_FLAGS
+    echo "Finished c simulations."
 fi
 
 #not sure if i need to consider plotting different methods

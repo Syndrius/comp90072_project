@@ -1,3 +1,4 @@
+#NEEDS WORK
 #placeholder, plots the time taken for each simulation.
 #may want to combine with the other plotting file later
 
@@ -20,7 +21,7 @@ input_file = "source/results/time.txt"
 
 #dictionary that stores the labels for each sim
 #labels and names will change
-dict_labels = {'pb':'Basic Python', 'pn':"Numpy", 'c':"Basic C"}
+dict_labels = {'pb':'Basic Python', 'pn':"Numpy", 'c':"Basic C", 'pm': 'Python Multi'}
 
 
 data = []
@@ -44,14 +45,17 @@ x_axis_labels = ["placehoder", "Start", "Data In", "1/5", "2/5", "3/5", "4/5", "
 
 fig, ax = plt.subplots()
 
+print(data)
+
 #probably want to do this as two figures, one with basic python, and one without
 for i in range(len(data)):
 
-    ax.plot(data[i], label=dict_labels[labels[i]])
+    ax.plot(data[i], label=f"{dict_labels[labels[i]]} {data[i][-1]:.2f}s")
 
 
 #may need a warning suppresion fir this fixed locator nonsense
 
+#note the nice axis things looked fkd with Multi as it goes up to ~600s
 
 #print(data[0])
 #plt.plot(data[0])

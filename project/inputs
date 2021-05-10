@@ -8,11 +8,15 @@
 CLEAN=false
 
 
-BASE_C_SIM=true
+BASE_C_SIM=false
 
 BASE_PY_SIM=true
 
 NUMPY_SIM=true
+
+
+#takes ~10 minutes!
+MULTI_PY_SIM=true
 
 
 #for plotting the results
