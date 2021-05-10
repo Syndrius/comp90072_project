@@ -58,7 +58,8 @@ if flag == 'Real':
 else:
     #this will need to be scaled big time!
     output_file = 'source/fake_planet_coords.txt'
-    bodies = argv[2]
+    bodies = int(sys.argv[2])
+    #should use a random seed for this to get same results each time
     coords = np.random.rand(bodies, 5)
     #set all masses to 1
     coords[:,4] = 1

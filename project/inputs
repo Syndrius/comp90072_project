@@ -30,7 +30,9 @@ PLOT_TIMES=true
 #this dictates if the real solar system is used or a generic n-body problem with more 
 #bodies for comparison of methods!
 #this is a bit of a placeholder!
-REAL=true
+#REAL=false -> shows multiprocessing being best! followed closely by numpy!
+#WOAH
+REAL=false
 
 
 #another one

@@ -45,7 +45,6 @@ x_axis_labels = ["placehoder", "Start", "Data In", "1/5", "2/5", "3/5", "4/5", "
 
 fig, ax = plt.subplots()
 
-print(data)
 
 #probably want to do this as two figures, one with basic python, and one without
 for i in range(len(data)):

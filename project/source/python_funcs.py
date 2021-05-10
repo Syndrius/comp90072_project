@@ -38,7 +38,7 @@ def basic_sim(ss, iters, init_time):
 
         temp_list = []
         #maybe want another function called update
-        for j in range(len(x)):
+        for j in range(len(ss[0])):
             
             ss[0][j] += ss[2][j]*dt
             ss[1][j] += ss[3][j]*dt
@@ -73,8 +73,8 @@ def basic_compute_a(ss):
             angle = math.atan2(y_diff, x_diff)
             force = G*ss[4][j]*ss[4][k]/(x_diff**2 + y_diff**2)
             
-            a1 = force/mass[j]
-            a2 = force/mass[k]
+            a1 = force/ss[4][j]
+            a2 = force/ss[4][k]
             #not entirely clear why we need the pi here lol
             ax[j] += a1*math.cos(angle)
             ay[j] += a1*math.sin(angle)
@@ -147,6 +147,7 @@ def numpy_compute_a(ss):
 
 #works!
 def multi_sim(ss, iters, init_time):
+    print("Running multiprocessing simulation...")
 
     time_checks = []
     times = []

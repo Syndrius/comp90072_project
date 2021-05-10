@@ -4,6 +4,8 @@
 #implement read and write for different types
 #may have to ignore file reading and writing for Multi
 #
+#get working for 'fake' sim
+#
 #Fix base c alg for new ss structure -> files will need to be read differently
 #
 #add multiprocessing for c
@@ -45,7 +47,10 @@ if [ $REAL = true ]; then
         eval python3 source/compute_asteroid.py $FLAGS
     fi
 else
-    ITERS=10000
+    #probably want to consider 3 cases:
+    #the real, ~loads of bodies and barely any iters
+    #somewhere in between
+    ITERS=100
     INITIAL_COORD_FILE="source/fake_planet_coords.txt"
     FLAGS="$INITIAL_COORD_FILE $ITERS"
     if [ ! -f $INITIAL_COORD_FILE ]; then
@@ -99,7 +104,7 @@ fi
 #string is not empty
 #ie only runs the python simulation if one of the sims is being called!
 if [ -n "$PY_FLAGS" ]; then
-    echo "Running python simulations..."
+    echo "Running python simulations:"
     eval python3 source/python_main.py $FLAGS $PY_FLAGS
     echo "Finished python simulations."
 fi
@@ -107,7 +112,7 @@ fi
 
 #maybe shouldn't compile everytime??
 if [ -n "$C_FLAGS" ]; then
-    echo "Compiling c simulations..."
+    echo "Compiling c simulations:"
     #maybe define varibles of compiler and flags etc
     eval gcc -Wall -o c_sim source/c_main.c source/c_sims.c
     #this is to ensure file are in right spot and can read other files!
