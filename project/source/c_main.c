@@ -11,20 +11,31 @@ int main(int argc, char *argv[]) {
     //defining this twice, may be better to pass the pointer in
     long double** pos_history;
     //creates the main solar_system struct
-    solar_system_t ss;
+    solar_system_t ss;// = malloc(sizeof(solar_system_t));
 
 
     //probabaly want a guard for this!
     char *coord_file = argv[1];
     int iters = atoi(argv[2]);
+    int num_bodies = atoi(argv[3]);
 
     printf("%d\n", iters);
+    printf("%d\n", num_bodies);
 
 
     //probs want a function that initialises all these structs
     ss.num_bodies = 0;
     ss.iters_complete = 0;
     ss.max_iters = iters;
+    ss.max_bodies = num_bodies;
+
+    // creates the arrays for storing the positions etc
+    //needs to be done in a function!
+    ss.x = malloc(ss.max_bodies*sizeof(long double));
+    ss.y = malloc(ss.max_bodies*sizeof(long double));
+    ss.vx = malloc(ss.max_bodies*sizeof(long double));
+    ss.vy = malloc(ss.max_bodies*sizeof(long double));
+    ss.mass = malloc(ss.max_bodies*sizeof(long double));
 
     timer_t timer;
     //should be getting the initial time
@@ -44,7 +55,12 @@ int main(int argc, char *argv[]) {
     read_solar_system(fp, &ss);
 
     fclose(fp);
-
+    
+    int k;
+    printf("%d\n", ss.max_bodies);
+    for (k=0;k<ss.max_bodies;k++) {
+        printf("%Lf, %Lf, %Lf, %Lf, %Lf\n", ss.x[k], ss.y[k], ss.vx[k], ss.vy[k], ss.mass[k]);
+    }
 
     //this wont work to well for multiple c funcs, 
     // will need to create multiple timer objs

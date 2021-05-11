@@ -42,14 +42,19 @@ typedef struct {
 //this struct should defs be used, its more robust for variable planets
 // and it can store the iters_complete so that each body doesn;t have to store it!
 typedef struct {
+    long double *x;
+    long double *y;
+    long double *vx;
+    long double *vy;
+    long double *mass;
+    int max_bodies;
     int iters_complete;
-    body_t bodies[MAX_BODIES];
     int num_bodies;
     int max_iters;
 } solar_system_t;
 
 
 void read_solar_system(FILE *fp, solar_system_t *ss);
-void simulation(solar_system_t *ss, long double** pos_historyi, timer_t *timer);
-void update_bodies(solar_system_t *ss, long double *pos_history);
+void simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
+void update_bodies(solar_system_t *ss, long double *pos_history, long double *ax, long double *ay);
 float timedifference_msec(struct timeval t0, struct timeval t1);

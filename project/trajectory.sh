@@ -4,8 +4,6 @@
 #implement read and write for different types
 #may have to ignore file reading and writing for Multi
 #
-#get working for 'fake' sim
-#
 #Fix base c alg for new ss structure -> files will need to be read differently
 #
 #add multiprocessing for c
@@ -40,6 +38,8 @@ if [ $REAL = true ]; then
     #want to be able to choose this/have two options depending on real planets or fake
     ITERS=500000
     INITIAL_COORD_FILE="source/real_planet_coords.txt"
+    #needed for c
+    NUM_BODIES=10
     FLAGS="$INITIAL_COORD_FILE $ITERS"
     #gets the initial coord file then generates the asteroid!
     if [ ! -f $INITIAL_COORD_FILE ]; then
@@ -119,7 +119,7 @@ if [ -n "$C_FLAGS" ]; then
     eval mv c_sim source/
     echo "Done"
     echo "Running basic c simulations..."
-    eval ./source/c_sim $FLAGS $C_FLAGS
+    eval ./source/c_sim $FLAGS $NUM_BODIES $C_FLAGS
     echo "Finished c simulations."
 fi
 

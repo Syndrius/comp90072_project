@@ -8,23 +8,23 @@
 CLEAN=false
 
 
-BASE_C_SIM=false
+BASE_C_SIM=true
 
-BASE_PY_SIM=true
+BASE_PY_SIM=false
 
-NUMPY_SIM=true
+NUMPY_SIM=false
 
 
 #takes ~10 minutes!
-MULTI_PY_SIM=true
+MULTI_PY_SIM=false
 
 
 #for plotting the results
 #maybe only record the trajectroy if this is true?
-PLOT_TRAJ=false
+PLOT_TRAJ=true
 
 
-PLOT_TIMES=true
+PLOT_TIMES=false
 
 
 #this dictates if the real solar system is used or a generic n-body problem with more 
@@ -32,7 +32,7 @@ PLOT_TIMES=true
 #this is a bit of a placeholder!
 #REAL=false -> shows multiprocessing being best! followed closely by numpy!
 #WOAH
-REAL=false
+REAL=true
 
 
 #another one
