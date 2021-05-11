@@ -4,9 +4,7 @@
 #implement read and write for different types
 #may have to ignore file reading and writing for Multi
 #
-#Fix base c alg for new ss structure -> files will need to be read differently
-#
-#add multiprocessing for c
+#implment c, choosing!
 #
 #add gpu for python
 #
@@ -114,7 +112,8 @@ fi
 if [ -n "$C_FLAGS" ]; then
     echo "Compiling c simulations:"
     #maybe define varibles of compiler and flags etc
-    eval gcc -Wall -o c_sim source/c_main.c source/c_sims.c
+    #may want to split the compiling of multi and base up!
+    eval gcc-6 -fopenmp -Wall -o c_sim source/c_main.c source/c_sims.c
     #this is to ensure file are in right spot and can read other files!
     eval mv c_sim source/
     echo "Done"

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <time.h>
 #include <sys/time.h>
+#include <omp.h>
 
 // check this is the correct size!
 //will want to read all this in soon!
@@ -55,6 +56,8 @@ typedef struct {
 
 
 void read_solar_system(FILE *fp, solar_system_t *ss);
-void simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
+void base_simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
+void multi_simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
 void update_bodies(solar_system_t *ss, long double *pos_history, long double *ax, long double *ay);
 float timedifference_msec(struct timeval t0, struct timeval t1);
+void multi_compute_a(solar_system_t *ss, int index, long double *a);

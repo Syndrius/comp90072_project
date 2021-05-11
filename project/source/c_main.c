@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     }
     //printf("got to here\n");   
     //runs the simulation
-    simulation(&ss, pos_history, &timer);
+    multi_simulation(&ss, pos_history, &timer);
     
     //gets the time after the sim is complete
     gettimeofday(&timer.stop, NULL);
