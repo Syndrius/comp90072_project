@@ -3,10 +3,9 @@
 #TODO
 #implement read and write for different types
 #may have to ignore file reading and writing for Multi
+#Probs exclude read, write from most but discuss that c and numpy also read, write files better
 #
-#implment c, choosing!
-#
-#add gpu for python
+#add gpu for python -> looks like this will be harder than initial thought, maybe give it a go later?, may be easier on ubuntu??
 #
 #tidy up plotting
 #
@@ -27,7 +26,7 @@ PY_FLAGS=""
 C_FLAGS=""
 
 #can do this over a loop to see how they run with variable number of bodies!
-NUM_BODIES=1000
+NUM_BODIES=10000
 
 RESULTS_DIR="source/results"
 
@@ -35,24 +34,24 @@ RESULTS_DIR="source/results"
 if [ $REAL = true ]; then
     #want to be able to choose this/have two options depending on real planets or fake
     ITERS=500000
-    INITIAL_COORD_FILE="source/real_planet_coords.txt"
+    INITIAL_COORD_FILE="source/helper/real_planet_coords.txt"
     #needed for c
     NUM_BODIES=10
     FLAGS="$INITIAL_COORD_FILE $ITERS"
     #gets the initial coord file then generates the asteroid!
     if [ ! -f $INITIAL_COORD_FILE ]; then
-        eval python3 source/get_planet_coords.py "Real"
-        eval python3 source/compute_asteroid.py $FLAGS
+        eval python3 source/helper/get_planet_coords.py "Real"
+        eval python3 source/helper/compute_asteroid.py $FLAGS
     fi
 else
     #probably want to consider 3 cases:
     #the real, ~loads of bodies and barely any iters
     #somewhere in between
     ITERS=100
-    INITIAL_COORD_FILE="source/fake_planet_coords.txt"
+    INITIAL_COORD_FILE="source/helper/fake_planet_coords.txt"
     FLAGS="$INITIAL_COORD_FILE $ITERS"
     if [ ! -f $INITIAL_COORD_FILE ]; then
-        eval python3 source/get_planet_coords.py "Fake" $NUM_BODIES
+        eval python3 source/helper/get_planet_coords.py "Fake" $NUM_BODIES
     fi
 fi
 
@@ -75,6 +74,12 @@ fi
 if [ $BASE_C_SIM = true ]; then
     C_FLAGS="$C_FLAGS b"
 fi
+
+if [ $MULTI_C_SIM = true ]; then
+    C_FLAGS="$C_FLAGS m"
+fi
+
+#echo $C_FLAGS
 
 #wont always want to do this, but good for now!
 eval rm source/results/time.txt
@@ -103,7 +108,7 @@ fi
 #ie only runs the python simulation if one of the sims is being called!
 if [ -n "$PY_FLAGS" ]; then
     echo "Running python simulations:"
-    eval python3 source/python_main.py $FLAGS $PY_FLAGS
+    eval python3 source/py_sims/main.py $FLAGS $PY_FLAGS
     echo "Finished python simulations."
 fi
 
@@ -113,7 +118,9 @@ if [ -n "$C_FLAGS" ]; then
     echo "Compiling c simulations:"
     #maybe define varibles of compiler and flags etc
     #may want to split the compiling of multi and base up!
-    eval gcc-6 -fopenmp -Wall -o c_sim source/c_main.c source/c_sims.c
+    #need to determine best place to put exe
+    #think where it is, is good, as interactions with results dir wont change
+    eval gcc-6 -fopenmp -Wall -o c_sim source/c_sims/main.c source/c_sims/sims.c source/c_sims/helper.c
     #this is to ensure file are in right spot and can read other files!
     eval mv c_sim source/
     echo "Done"
@@ -132,12 +139,13 @@ if [ $PLOT_TRAJ = true ]; then
         echo "No data found, please run one of the simulations."
     else
         echo "Plotting the trajectories..."
-        eval python3 source/plot_trajectories.py
+        eval python3 source/helper/plot_trajectories.py
         echo "Done"
     fi
 fi
 
 
+#should add similar guard as plot_traj
 if [ $PLOT_TIMES = true ]; then
-    eval python3 source/plot_times.py
+    eval python3 source/helper/plot_times.py
 fi

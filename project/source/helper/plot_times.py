@@ -21,7 +21,7 @@ input_file = "source/results/time.txt"
 
 #dictionary that stores the labels for each sim
 #labels and names will change
-dict_labels = {'pb':'Basic Python', 'pn':"Numpy", 'c':"Basic C", 'pm': 'Python Multi'}
+dict_labels = {'pb':'Basic Python', 'pn':"Numpy", 'cb':"Basic C", 'pm': 'Python Multi', 'cm': 'C Multi'}
 
 
 data = []
@@ -40,6 +40,7 @@ with open(input_file, 'r') as f:
 #print(labels)
 #print(data)
 
+#c is not recording time for data to be read in, need to adjust, otherwise looks nb
 #need the placeholder as matplotlib think a hidden tick is a good idea!
 x_axis_labels = ["placehoder", "Start", "Data In", "1/5", "2/5", "3/5", "4/5", "Sim Done", "Data Out"]
 

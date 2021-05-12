@@ -13,6 +13,8 @@
 #define MAX_BODIES 10
 #define G 2.96*pow(10, -4)
 #define DT 0.01
+#define TIME_FILE "source/results/time.txt"
+#define OUTPUT_FILE "source/results/data.txt" //not certain this is needed
 //may need to change
 #define TIMES_RECORDED 8
 
@@ -61,3 +63,9 @@ void multi_simulation(solar_system_t *ss, long double** pos_history, timer_t *ti
 void update_bodies(solar_system_t *ss, long double *pos_history, long double *ax, long double *ay);
 float timedifference_msec(struct timeval t0, struct timeval t1);
 void multi_compute_a(solar_system_t *ss, int index, long double *a);
+void init_ss(char *coord_file, solar_system_t *ss, int iters, int num_bodies);
+void init_pos_history(long double **pos_history, int iters, int size);
+void run_multi_sim(solar_system_t *ss);
+void run_base_sim(solar_system_t *ss);
+void write_time(char *time_file, timer_t *timer, char* label);
+void write_pos(char *output_file, long double **pos_history, int iters, int size);

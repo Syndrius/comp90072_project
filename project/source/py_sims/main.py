@@ -8,7 +8,7 @@
 #probably want the file read and write to be done using the method of the sim!
 
 import csv #dont think this is used ever
-import python_funcs #terrible name -> change pls
+import sims #terrible name -> change pls
 import sys
 #used for file input
 import numpy as np
@@ -45,21 +45,21 @@ if "b" in flags:
     times = [0]
     #not implemented yet!
     #reads the file in and records the time
-    ss = python_funcs.base_read_file(coord_file)
+    ss = sims.base_read_file(coord_file)
     times.append(time.perf_counter()-init_time)
 
     #runs the sim
-    ss, pos_history, b_sim_times = python_funcs.basic_sim(ss, iters, init_time)
+    ss, pos_history, b_sim_times = sims.basic_sim(ss, iters, init_time)
     #want some kind of path variable
     #keep these the same for now, having multiple doesn't help!
     b_time = times + b_sim_times
 
     #not implemted yet
-    python_funcs.base_write_to_file(output_file, pos_history)
+    sims.base_write_to_file(output_file, pos_history)
     #records time taken to write data
     b_time.append(time.perf_counter()-init_time)
     #label pb = python basic
-    python_funcs.write_times('pb', b_time, time_file)
+    sims.write_times('pb', b_time, time_file)
 
 
 #works as intended I think
@@ -67,20 +67,20 @@ if "n" in flags:
 
     init_time = time.perf_counter()
     times = [0]
-    ss = python_funcs.numpy_read_file(coord_file)
+    ss = sims.numpy_read_file(coord_file)
     times.append(time.perf_counter()-init_time)
 
     #resets the init time
-    ss, pos_history, n_sim_times = python_funcs.numpy_sim(ss, iters, init_time)
+    ss, pos_history, n_sim_times = sims.numpy_sim(ss, iters, init_time)
     n_time = times + n_sim_times
     #want some kind of path variable
     output_file = "source/results/data.txt"
-    python_funcs.numpy_write_to_file(output_file, pos_history)
+    sims.numpy_write_to_file(output_file, pos_history)
     #records time taken to write data
     n_time.append(time.perf_counter()-init_time)
 
     #label pn = python numpy
-    python_funcs.write_times('pn', n_time, time_file)
+    sims.write_times('pn', n_time, time_file)
 
 
 #mostly working
@@ -91,20 +91,20 @@ if "m" in flags:
     init_time = time.perf_counter()
     times = [0]
     #reads the file and records the time taken
-    ss = python_funcs.multi_read_file(coord_file)
+    ss = sims.multi_read_file(coord_file)
     times.append(time.perf_counter()-init_time)
 
-    ss, pos_history, m_sim_times = python_funcs.multi_sim(ss, iters, init_time)
+    ss, pos_history, m_sim_times = sims.multi_sim(ss, iters, init_time)
     #want some kind of path variable
     #keep these the same for now, having multiple doesn't help!
     m_time = times + m_sim_times
     output_file = "source/results/data.txt"
     #shouldn't need this!
     pos_history = np.array(pos_history)
-    python_funcs.multi_write_to_file(output_file, pos_history)
+    sims.multi_write_to_file(output_file, pos_history)
     #records time taken to write data
     m_time.append(time.perf_counter()-init_time)
     #label pb = python basic
-    python_funcs.write_times('pm', m_time, time_file)
+    sims.write_times('pm', m_time, time_file)
 
 

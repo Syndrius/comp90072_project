@@ -228,10 +228,15 @@ def base_read_file(file_name):
 
     return [x, y, vx, vy, mass]
 
+#miss me with this shit!
+#just have a quick discussion of reading and writing to file
 #uses numpy to read the initial_coord file
 #note multiprocessing uses this!
 def numpy_read_file(f):
     return np.loadtxt(f).T
+
+def read_file(file_name):
+    return np.loadtxt(file_name).T
 
 #this will be really ineficient!
 def multi_read_file(file_name):
@@ -243,6 +248,10 @@ def base_write_to_file(file_name, pos):
     return numpy_write_to_file(file_name, pos)
 def numpy_write_to_file(file_name, pos):
     np.savetxt(file_name, pos)
+
+def write_to_file(file_name, pos):
+    np.savetxt(file_name, pos)
+
 
 #placeholder, needs to be implemented!
 def multi_write_to_file(file_name, pos):

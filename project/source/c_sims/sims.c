@@ -1,44 +1,10 @@
 //stores the simulation functions 
 
-#include "c_main.h"
+#include "main.h"
 
 //this works! may not be passing the things around properly
 //ie pointers vs not pointers!
-void read_solar_system(FILE *fp, solar_system_t *ss) {
-    //nothing stopiing bodies read being more than MAX_BODIES
-    //maybe add some kind of guard?
-    //second condition is very important
-    // who wouldve thunked it!
-    while (!feof(fp) && (ss->num_bodies < MAX_BODIES)) {
-        fscanf(fp, "%Lf %Lf %Lf %Lf %Lf",
-            &ss->x[ss->num_bodies],
-            &ss->y[ss->num_bodies],
-            &ss->vx[ss->num_bodies],
-            &ss->vy[ss->num_bodies],
-            &ss->mass[ss->num_bodies]);
 
-            /*
-            &ss->bodies[ss->num_bodies].x, 
-            &ss->bodies[ss->num_bodies].y, 
-            &ss->bodies[ss->num_bodies].vx, 
-            &ss->bodies[ss->num_bodies].vy, 
-            &ss->bodies[ss->num_bodies].radius, 
-            &ss->bodies[ss->num_bodies].mass);
-            */
-        //why no & for this?
-        //printf("%Lf\n", ss->bodies[ss->num_bodies].ax);
-        //ss->bodies[ss->num_bodies].ax = 0;
-        //ss->bodies[ss->num_bodies].ay = 0;
-        //need to use malloc for this
-        // allocating memory in struct doesn't have enough space
-        // malloc puts the memory somewhere else
-        //ss->bodies[ss->num_bodies].x_positions = malloc(ss->max_iters*sizeof(long double));
-        //ss->bodies[ss->num_bodies].y_positions = malloc(ss->max_iters*sizeof(long double));
-        //ss->bodies[ss->num_bodies].x_positions[0] = ss->bodies[ss->num_bodies].x;
-        //ss->bodies[ss->num_bodies].y_positions[0] = ss->bodies[ss->num_bodies].y;
-        ss->num_bodies += 1;
-    }
-}
 
 // change this to return array of doubles
 void base_simulation(solar_system_t *ss, long double **pos_history, timer_t *timer) {
@@ -102,6 +68,7 @@ void base_simulation(solar_system_t *ss, long double **pos_history, timer_t *tim
                 ay[k] += a2*sin(angle + M_PI);
             }
         }
+        //printf("did a loop\n");
         //printf("%Lf\n", ax[1]);
         ss->iters_complete += 1;
         //updates each bodies position and velocity
@@ -235,6 +202,7 @@ void multi_compute_a(solar_system_t *ss, int index, long double *a) {
     }
 }
 
+//use of this is super inconsistant
 void update_bodies(solar_system_t *ss, long double *pos_history, long double *ax, long double *ay) {
     int i;
     //printf("%Lf\n", ay[1]);
@@ -272,8 +240,3 @@ void update_bodies(solar_system_t *ss, long double *pos_history, long double *ax
 }
 
 
-// this is defined twice which is no good
-float timedifference_msec(struct timeval t0, struct timeval t1)
-{
-    return (t1.tv_sec - t0.tv_sec) * 1000.0f + (t1.tv_usec - t0.tv_usec) / 1000.0f;
-}
