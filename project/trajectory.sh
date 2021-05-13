@@ -1,32 +1,25 @@
 #NEEDS WORK
 
 #TODO
-#implement read and write for different types
-#may have to ignore file reading and writing for Multi
-#Probs exclude read, write from most but discuss that c and numpy also read, write files better
-#
 #add gpu for python -> looks like this will be harder than initial thought, maybe give it a go later?, may be easier on ubuntu??
 #
 #tidy up plotting
 #
-#clean up all the funcs
+#write a little author and description thing for each file
+#
+#README file!
 
 source inputs
 
 #may want to convert strings to lower etc for generic input
-
-#currently:
-#c ~10s
-#numpy ~30s
-#base_python ~80s
-
 
 #empty strings for adding flags to be passed around to!
 PY_FLAGS=""
 C_FLAGS=""
 
 #can do this over a loop to see how they run with variable number of bodies!
-NUM_BODIES=10000
+#or just manually run it a few times and save the output files!
+NUM_BODIES=1000
 
 RESULTS_DIR="source/results"
 
@@ -58,6 +51,7 @@ fi
 #can check size of coord file to see if it needs to be remade
 #probabaly have plot_traj always false unless real=true
 
+#adds the appropriate flags for each sim
 if [ $BASE_PY_SIM = true ]; then
     PY_FLAGS="$PY_FLAGS b"
 fi
@@ -70,7 +64,6 @@ if [ $MULTI_PY_SIM = true ]; then
     PY_FLAGS="$PY_FLAGS m"
 fi
 
-
 if [ $BASE_C_SIM = true ]; then
     C_FLAGS="$C_FLAGS b"
 fi
@@ -78,8 +71,6 @@ fi
 if [ $MULTI_C_SIM = true ]; then
     C_FLAGS="$C_FLAGS m"
 fi
-
-#echo $C_FLAGS
 
 #wont always want to do this, but good for now!
 eval rm source/results/time.txt
@@ -97,7 +88,6 @@ if [ $CLEAN = true ]; then
     #eval rm source/planet_coords.txt
 fi
 
-
 #creates the results directory if it does not exist!
 #this should probably have the RESULT_DIR variable
 if [ ! -e 'source/results' ]; then
@@ -112,8 +102,8 @@ if [ -n "$PY_FLAGS" ]; then
     echo "Finished python simulations."
 fi
 
-
 #maybe shouldn't compile everytime??
+#maybe run c before python if multi c is wrong!
 if [ -n "$C_FLAGS" ]; then
     echo "Compiling c simulations:"
     #maybe define varibles of compiler and flags etc
@@ -124,14 +114,11 @@ if [ -n "$C_FLAGS" ]; then
     #this is to ensure file are in right spot and can read other files!
     eval mv c_sim source/
     echo "Done"
-    echo "Running basic c simulations..."
+    echo "Running c simulations:"
     eval ./source/c_sim $FLAGS $NUM_BODIES $C_FLAGS
     echo "Finished c simulations."
 fi
 
-#not sure if i need to consider plotting different methods
-#they should all result in the same file of numbers!
-#need to pass command line argument with the file in it!
 #maybe need a guard to check the results directory isn't empty!
 if [ $PLOT_TRAJ = true ]; then
     #checks there are some results to plot
@@ -143,7 +130,6 @@ if [ $PLOT_TRAJ = true ]; then
         echo "Done"
     fi
 fi
-
 
 #should add similar guard as plot_traj
 if [ $PLOT_TIMES = true ]; then

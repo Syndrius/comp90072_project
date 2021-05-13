@@ -50,7 +50,7 @@ fig, ax = plt.subplots()
 #probably want to do this as two figures, one with basic python, and one without
 for i in range(len(data)):
 
-    ax.plot(data[i], label=f"{dict_labels[labels[i]]} {data[i][-1]:.2f}s")
+    ax.plot(data[i], label=f"{dict_labels[labels[i]]}: {data[i][-1]:.2f}s")
 
 
 #may need a warning suppresion fir this fixed locator nonsense

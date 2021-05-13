@@ -10,6 +10,7 @@ CLEAN=false
 
 BASE_C_SIM=true
 
+#trajectory for this is wrong!
 MULTI_C_SIM=true
 
 BASE_PY_SIM=false
