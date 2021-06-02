@@ -1,22 +1,10 @@
+#Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+
 #NEEDS WORK
+#this file needs to be cleaned up big time! currently it is terrible!
 
 #TODO
-#add gpu for python -> looks like this will be harder than initial thought, maybe give it a go later?, may be easier on ubuntu??
-#
-#tidy up plotting
-#
-#write a little author and description thing for each file
-#
-#README file!
-#
-#Make this work for multiple num_bodies and iters
-#-> can define bash functions and do loops etc
-#may need to change the sims to write the num_bodies and iters 
-#to the time file
-
 source inputs
-
-#may want to convert strings to lower etc for generic input
 
 #empty strings for adding flags to be passed around to!
 PY_FLAGS=""
@@ -27,7 +15,16 @@ C_FLAGS=""
 #can do this over a loop to see how they run with variable number of bodies!
 #or just manually run it a few times and save the output files!
 
-RESULTS_DIR="source/results"
+RESULTS_DIR="source/data"
+
+#creates the directories if it doesn't exist
+if [ ! -e $RESULTS_DIR ]; then
+    eval mkdir source/data
+fi
+
+if [ ! -e "results" ]; then
+    eval mkdir results
+fi
 
 
 #adds the appropriate flags for each sim
@@ -53,28 +50,23 @@ fi
 
 
 
+#Runs the c simulations with appropriate flags
 run_c_sims () {
-    #maybe shouldn't compile everytime??
-    #maybe run c before python if multi c is wrong!
     if [ -n "$C_FLAGS" ]; then
-        echo "Compiling c simulations:"
-        #maybe define varibles of compiler and flags etc
-        #may want to split the compiling of multi and base up!
-        #need to determine best place to put exe
-        #think where it is, is good, as interactions with results dir wont change
-        eval gcc-6 -fopenmp -Wall -o c_sim source/c_sims/main.c source/c_sims/sims.c source/c_sims/helper.c
-        #this is to ensure file are in right spot and can read other files!
-        eval mv c_sim source/
-        echo "Done"
+        if [ ! -f "source/c_sim" ]; then
+            echo "Compiling c simulations:"
+            eval gcc-6 -fopenmp -Wall -o c_sim source/c_sims/main.c source/c_sims/sims.c source/c_sims/helper.c
+            eval mv c_sim source/
+            echo "Done"
+        fi
         echo "Running c simulations:"
         eval ./source/c_sim $FLAGS $NUM_BODIES $C_FLAGS
         echo "Finished c simulations."
     fi
 
 }
+#Runs the python simulations with the appropriate flags
 run_py_sims () {
-    #this is second as c multi doesn't produce the right traj!
-    #string is not empty
     #ie only runs the python simulation if one of the sims is being called!
     if [ -n "$PY_FLAGS" ]; then
         echo "Running python simulations:"
@@ -84,30 +76,32 @@ run_py_sims () {
 }
 
 
-#this determines what type of initial coords are generated!
+#If true, runs the simulations with the initial coordinates of the real planets
 if [ $REAL = true ]; then
-    #want to be able to choose this/have two options depending on real planets or fake
     ITERS=500000
-    INITIAL_COORD_FILE="source/helper/real_planet_coords.txt"
-    #needed for c
     NUM_BODIES=10
+    INITIAL_COORD_FILE="source/helper/real_planet_coords.txt"
     FLAGS="$INITIAL_COORD_FILE $ITERS"
-    #gets the initial coord file then generates the asteroid!
+    #gets the initial coord file then generates the asteroid
     if [ ! -f $INITIAL_COORD_FILE ]; then
         eval python3 source/helper/get_planet_coords.py "Real"
         eval python3 source/helper/compute_asteroid.py $FLAGS
     fi
+    #runs the sims
     run_c_sims
     run_py_sims
-#not sure if this should be an elif!
+    eval rm source/c_sim
+    #plots the trajectories and the time taken
+    eval python3 source/helper/plot_trajectories.py
+    eval python3 -W ignore source/helper/plot_times.py
+
+#Creates heatmaps comparing the methods for different numbers of bodies and timesteps
 elif [ $HEATMAP = true ]; then
-    #need to ensure py basic doesn't run for this!
-    #need to stop output on each iteration!
     INITIAL_COORD_FILE="source/helper/fake_planet_coords.txt"
     #subject to change!
-    iters=(10 100 500)
-    bodies=(10 100 500)
-    #heatmap always excludes basic py and includes everything else!
+    iters=(50 100 1000 10000 50000 100000)
+    bodies=(10 50 100 200 400 800 1000)
+    #heatmap always excludes basic py and includes everything else
     PY_FLAGS="n m"
     C_FLAGS="b m"
     for i in ${iters[@]}; do
@@ -117,73 +111,26 @@ elif [ $HEATMAP = true ]; then
             NUM_BODIES=$j
             FLAGS="$INITIAL_COORD_FILE $ITERS"
             eval python3 source/helper/get_planet_coords.py "Fake" $NUM_BODIES
-            #fi
             run_c_sims
             run_py_sims
-            echo "$NUM_BODIES $ITERS " >> source/results/time.txt
+            echo "$NUM_BODIES $ITERS " >> source/data/time.txt
 
         done
     done
-    #eval mv source/results/time.txt source/results/heatmap.txt
+    eval mv source/data/time.txt source/data/heatmap.txt
     echo "Heatmap!"
+    eval rm source/c_sim
 
-#only runs if nothing else does!
+#otherwise run the sim with the generated bodies
 else
-    #will need to exclude the basic one for the heatmap
-    #probably want to consider 3 cases:
-    #the real, ~loads of bodies and barely any iters
-    #somewhere in between
     INITIAL_COORD_FILE="source/helper/fake_planet_coords.txt"
     FLAGS="$INITIAL_COORD_FILE $ITERS"
-    #if [ ! -f $INITIAL_COORD_FILE ]; then
-    #cant have the guard as this needs to be remade each time
     eval python3 source/helper/get_planet_coords.py "Fake" $NUM_BODIES
-    #fi
     run_c_sims
     run_py_sims
+    eval rm source/c_sim
+    eval python3 -W ignore source/helper/plot_times.py
 fi
 
-#can check size of coord file to see if it needs to be remade
-#probabaly have plot_traj always false unless real=true
-
-#wont always want to do this, but good for now!
-#this needs to be in a different spot now!
-#eval rm source/results/time.txt
-
-#want to add in conditions to maybe delete resutls folder
-#maybe to make sure the directory exists for now:
-#this should be earlier in the file, won't be using this much
-#more a proof of concept for final code
-#probably want to delete the c files as well
-if [ $CLEAN = true ]; then
-    echo "clean up dawg"
-    #deletes the results folder
-    eval rm -r source/results
-    #leave below commented out as recreating the coords is tiresome
-    #eval rm source/planet_coords.txt
-fi
-
-#creates the results directory if it does not exist!
-#this should probably have the RESULT_DIR variable
-if [ ! -e 'source/results' ]; then
-    eval mkdir source/results
-fi
-
-#maybe need a guard to check the results directory isn't empty!
-if [ $PLOT_TRAJ = true ]; then
-    #checks there are some results to plot
-    if [ ! -f $RESULTS_DIR"/data.txt" ]; then
-        echo "No data found, please run one of the simulations."
-    else
-        echo "Plotting the trajectories..."
-        eval python3 source/helper/plot_trajectories.py
-        echo "Done"
-    fi
-fi
-
-#should add similar guard as plot_traj
-if [ $PLOT_TIMES = true ]; then
-    eval python3 source/helper/plot_times.py
-fi
-
-eval rm source/results/time.txt
+#removes the file 
+eval rm source/data/time.txt

@@ -1,43 +1,39 @@
-#note this file does not need to be a txt file, can just be extensionless!
-#comment here
-#probably want this to contain just true false, and have a constants file
-#maybe the bash script can edit the constants file for things like step size
-#and plotting?
-
-#for cleaning the directory etc
-CLEAN=false
+#Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
 
 
+#This file controls which simulations and which scenarios are run
+#all options must be either true or false in all lowercase
+
+#set to true for the basic C simulation to be run
 BASE_C_SIM=true
 
-#trajectory for this is wrong!
-MULTI_C_SIM=true
+#set to true for the C simulation with multiprocessing to be run
+MULTI_C_SIM=false
 
+#set to true for the basic python simulation to be run
 BASE_PY_SIM=false
 
-NUMPY_SIM=true
+#set to true for the python simulation with numpy to be run
+NUMPY_SIM=false
 
 
-#takes ~10 minutes!
-MULTI_PY_SIM=true
+#set to true for the python simulation with multiprocessing to be run
+#note that this takes ~10 minutes when REAL=true
+MULTI_PY_SIM=false
 
 
-#for plotting the results
-#maybe only record the trajectroy if this is true?
-PLOT_TRAJ=false
+#If set to true, this will run the simulation using the real planets coordinates
+#then will plot the trajectories of the planets and the time taken by each sim
+REAL=true
 
 
-PLOT_TIMES=true
+#If REAL=false and this is true, creates heatmaps comparing the simulations
+#this always excludes the basic python simulation, but uses the other 4
+#this can take a while!
+HEATMAP=true
 
 
-#this dictates if the real solar system is used or a generic n-body problem with more 
-#bodies for comparison of methods!
-#this is a bit of a placeholder!
-#REAL=false -> shows multiprocessing being best! followed closely by numpy!
-#WOAH
-REAL=false
-
-
-#another one
-#is this the correct amount of planets???
-INITIAL_BODIES=9
+#If REAL=false and HEATMAP=false, the simulation will run with the chosen sims,
+#with randomly generated data with the following number of bodies and iterations
+ITERS=50
+NUM_BODIES=10

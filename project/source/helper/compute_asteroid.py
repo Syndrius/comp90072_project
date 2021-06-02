@@ -1,17 +1,15 @@
+# Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
 
-#this file works as intended atm
+
 #This file finds the initial coordiantes of an asteroid that will collide with Earth
 #It runs the simulation, then creates and asteroid at Earths location, then runs
 #the sim backwards to get the asteroids initial conditions.
 
 
-import math #dont think this is needed!
-#import csv #dont think this is required
-#import python_sims 
 import sys
 import numpy as np
 
-#need to stop defining these everywhere
+#sim paramaters
 G = 2.96*10**(-4)
 dt = 0.01
 
@@ -48,8 +46,7 @@ def compute_a(ss):
     dx = x.T - x
     dy = y.T - y
     
-    #needs a softening, I think because it is calculating the acceleration due to itself!
-    #without value it just gives nan everywhere!
+    #needs a softening
     inv_dist_cubed = (dx**2 + dy**2 + 0.000005**2)**(-1.5)
     
     ax = -G * (dx * inv_dist_cubed) @ mass

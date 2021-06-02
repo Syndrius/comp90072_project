@@ -1,20 +1,15 @@
-#NEEDS WORK
-#this will be the basic file that stores the classes and the functions that are used by everything!
-import math
-#need to determine where the imports should be!
+#Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
 
+
+import math
 import numpy as np
 import multiprocessing
 import helper
-
 import time
 
-#form of solar system array!
-#ss[0] = x, ss[1] = y, ss[2] = vx, ss[3] = vy, ss[4] = mass
 
 dt = 0.01
 G = 2.96*10**(-4) #units of Au^3/solar mass/days^2
-#at dt = 1 -> earth spirals inward -> demonstrates a minimum step_size for accuracy!
 
 def basic_sim(ss, iters, init_time):
     print("Running basic simulation...")
@@ -35,7 +30,7 @@ def basic_sim(ss, iters, init_time):
         ax, ay = basic_compute_a(ss)
 
         temp_list = []
-        #maybe want another function called update
+
         for j in range(len(ss[0])):
             
             ss[0][j] += ss[2][j]*dt

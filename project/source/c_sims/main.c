@@ -1,14 +1,9 @@
-/* 
+/* Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+ *
  * main c file, creates the solar system object then reads in 
  * command line arguments then calls the simulations
  *
- *
- *
- *
- *
- *
  */
-// need to start adding in free() and guards for files etc
 
 #include "main.h"
 
@@ -19,7 +14,7 @@ int main(int argc, char *argv[]) {
     solar_system_t ss;
     
     
-    //not sure how needed this is
+    //ensures command line args are correct
     if (argc < 2) {
         printf("Error with command line arguments.\n");
         return 0;
@@ -51,6 +46,7 @@ int main(int argc, char *argv[]) {
         printf("Running multiprocessing simulation...\n");
         run_multi_sim(&ss);
     }
+    free_ss(&ss);
 
     return 0;
 

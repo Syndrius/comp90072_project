@@ -1,4 +1,8 @@
-//stores the simulation functions 
+/* Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+ * 
+ * Contains the simulation functions
+ *
+ */
 
 #include "main.h"
 
@@ -14,7 +18,7 @@ void base_simulation(solar_system_t *ss, long double **pos_history, timer_t *tim
 
     for (i=0;i<ss->max_iters;i++) {
 
-        // this is gross
+        // measures the time at set intervals
         if ((i == ss->max_iters/5 * 1) || (i == ss->max_iters/5 * 2) || (i == ss->max_iters/5 * 3) || (i == ss->max_iters/5 * 4)) {
             gettimeofday(&timer->stop, NULL);
             timer->times[timer->recorded] = timedifference_msec(timer->start, timer->stop);
@@ -57,6 +61,8 @@ void base_simulation(solar_system_t *ss, long double **pos_history, timer_t *tim
         //updates each bodies position and velocity
         update_bodies(ss, pos_history[i], ax, ay);
     }
+    free(ax);
+    free(ay);
 
 }
 

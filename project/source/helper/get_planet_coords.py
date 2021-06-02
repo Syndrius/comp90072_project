@@ -1,16 +1,13 @@
-#NEEDS WORK
+#Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+
 from astroquery.jplhorizons import Horizons
 import numpy as np
-
 import sys
-
 
 flag = sys.argv[1]
 
-
 #conversions to get units in better forms
 kg_to_SM = 5.02785*10**(-31)
-#km_to_AU = 6.68459*10**(-9)
 
 
 #corresponds to March 19 2021
@@ -21,8 +18,6 @@ planet_coord_file = 'planet_coords.txt'
 
 bodies = ['Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
 
-
-#could just have a list of the masses??
 
 
 body_properties = {'Sun': (1.988e30, 6.955e5),
@@ -37,16 +32,13 @@ body_properties = {'Sun': (1.988e30, 6.955e5),
            }
 
 
-
 #consider the 'real' simulation of 9 plents and 1 asteroid!
 if flag == 'Real':
     
     bodies_to_query = 9
-    #output_file = 'source/' + planet_coord_file
     output_file = 'source/real_planet_coords.txt'
 
-
-
+    #querys JPL and writes to file
     with open(output_file, 'w') as f:
         
         for i in range(bodies_to_query):
@@ -56,13 +48,12 @@ if flag == 'Real':
                    query['vy'].data[0],  body_properties[bodies[i]][0]*kg_to_SM))
 
 else:
-    #this will need to be scaled big time!
-    output_file = 'source/fake_planet_coords.txt'
-    bodies = int(sys.argv[2])
-    #should use a random seed for this to get same results each time
-    coords = np.random.rand(bodies, 5)
+    output_file = 'source/helper/fake_planet_coords.txt'
+    num_bodies = int(sys.argv[2])
+    #randomly generate coordinates
+    coords = np.random.rand(num_bodies, 5)
     #set all masses to 1
     coords[:,4] = 1
-    #this might not be saving in correct form!
+    #save the data
     np.savetxt(output_file, coords)
 

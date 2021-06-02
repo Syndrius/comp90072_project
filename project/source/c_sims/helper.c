@@ -1,9 +1,9 @@
-/*
+/* Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+ *
  * File of helper function that provide file input/output and memory allocation
  *
- *
- *
  */
+
 #include "main.h"
 
 /* Writes the history of positions for each body to the output file for plotting */
@@ -79,6 +79,8 @@ void run_base_sim(solar_system_t *ss) {
     // Writes the times to file
     write_time(TIME_FILE, &timer, "cb");
 
+    free_pos_history(pos_history, ss->max_iters);
+
 }
 
 
@@ -116,6 +118,7 @@ void run_multi_sim(solar_system_t *ss) {
     // Writes the time to file
     write_time(TIME_FILE, &timer, "cm");
 
+    free_pos_history(pos_history, ss->max_iters);
 }
 
 /* Allocates the memory for storing the position history */
@@ -175,3 +178,20 @@ void init_ss(char *coord_file, solar_system_t *ss, int iters, int num_bodies) {
     fclose(fp);
     
 } 
+
+/* frees the memory allocated to ss */
+void free_ss(solar_system_t *ss) {
+    free(ss->x);
+    free(ss->y);
+    free(ss->vx);
+    free(ss->vy);
+    free(ss->mass);
+}
+
+/* frees the memory allocated to pos_history */
+void free_pos_history(long double **pos_history, int iters) {
+    for (int i=0;i<iters;i++) {
+        free(pos_history[i]);
+    }
+    free(pos_history);
+}

@@ -1,6 +1,7 @@
-#NEEDS WORK
-#this file just reads in the initial coords, calls the simulation function
-#then writes out the positions of the bodies!
+#Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+
+#this file reads in the initial coords, calls the simulation function
+#then writes out the positions of the bodies
 
 
 
@@ -23,8 +24,8 @@ iters = int(sys.argv[2])
 flags = sys.argv[3:]
 
 #this is a constant
-time_file = "source/results/time.txt"
-output_file = "source/results/data.txt"
+time_file = "source/data/time.txt"
+output_file = "source/data/data.txt"
 
 #needs basic read write to be implemented
 #otherwise works!

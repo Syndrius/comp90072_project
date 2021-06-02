@@ -1,8 +1,6 @@
-/* 
+/* Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
+ *
  * Header file that contains the definitions for functions, structs and constants
- *
- *
- *
  *
  */
 #include <stdio.h>
@@ -15,14 +13,11 @@
 
 #define G 2.96*pow(10, -4)
 #define DT 0.01
-#define TIME_FILE "source/results/time.txt"
-#define OUTPUT_FILE "source/results/data.txt" 
-// may need to change
+#define TIME_FILE "source/data/time.txt"
+#define OUTPUT_FILE "source/data/data.txt" 
 #define TIMES_RECORDED 8
 
-// stores the array of the times
-// this works as intended but time only goes to seconds!
-//need to use something else
+
 // Struct for keeping track of the time taken for sims to run
 typedef struct {
     struct timeval start;
@@ -45,7 +40,7 @@ typedef struct {
     int max_iters;
 } solar_system_t;
 
-
+// function declerations
 void read_solar_system(FILE *fp, solar_system_t *ss);
 void base_simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
 void multi_simulation(solar_system_t *ss, long double** pos_history, timer_t *timer);
@@ -58,3 +53,5 @@ void run_multi_sim(solar_system_t *ss);
 void run_base_sim(solar_system_t *ss);
 void write_time(char *time_file, timer_t *timer, char* label);
 void write_pos(char *output_file, long double **pos_history, int iters, int size);
+void free_pos_history(long double **pos_history, int iters);
+void free_ss(solar_system_t *ss);
