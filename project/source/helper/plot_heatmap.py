@@ -75,8 +75,11 @@ sns.heatmap(cb_n, ax = ax[0][0], xticklabels=x_labs, yticklabels=y_labs, vmin=0,
 sns.heatmap(cm_n, ax = ax[0][1], xticklabels=x_labs, yticklabels=y_labs, vmin=0, vmax=1, cmap='Oranges')
 sns.heatmap(pn_n, ax = ax[1][0], xticklabels=x_labs, yticklabels=y_labs, vmin=0, vmax=1, cmap='Blues')
 sns.heatmap(pm_n, ax = ax[1][1], xticklabels=x_labs, yticklabels=y_labs, vmin=0, vmax=1, cmap='Purples')
-ax[1][0].set_xlabel('Iters')
+ax[1][0].set_xlabel('Timesteps')
 ax[0][0].set_ylabel('Bodies')
+
+ax[1][0].set_ylabel('Bodies')
+ax[1][1].set_xlabel('Timesteps')
 
 ax[0][0].set_title("Basic C")
 ax[0][1].set_title("Multi C")
