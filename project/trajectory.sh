@@ -17,7 +17,7 @@ C_FLAGS=""
 
 RESULTS_DIR="source/data"
 
-#creates the directories if it doesn't exist
+#creates the directories if they don't exist
 if [ ! -e $RESULTS_DIR ]; then
     eval mkdir source/data
 fi
@@ -94,13 +94,13 @@ if [ $REAL = true ]; then
     #plots the trajectories and the time taken
     eval python3 source/helper/plot_trajectories.py
     eval python3 -W ignore source/helper/plot_times.py
+    eval rm source/data/time.txt
 
 #Creates heatmaps comparing the methods for different numbers of bodies and timesteps
 elif [ $HEATMAP = true ]; then
     INITIAL_COORD_FILE="source/helper/fake_planet_coords.txt"
-    #subject to change!
-    iters=(50 100 1000 10000 50000 100000)
-    bodies=(10 50 100 200 400 800 1000)
+    iters=(50 100 300 1000 2000)
+    bodies=(10 100 300 500 1000)
     #heatmap always excludes basic py and includes everything else
     PY_FLAGS="n m"
     C_FLAGS="b m"
@@ -118,7 +118,7 @@ elif [ $HEATMAP = true ]; then
         done
     done
     eval mv source/data/time.txt source/data/heatmap.txt
-    echo "Heatmap!"
+    eval python3 source/helper/plot_heatmap.py
     eval rm source/c_sim
 
 #otherwise run the sim with the generated bodies
@@ -130,7 +130,6 @@ else
     run_py_sims
     eval rm source/c_sim
     eval python3 -W ignore source/helper/plot_times.py
+    eval rm source/data/time.txt
 fi
 
-#removes the file 
-eval rm source/data/time.txt

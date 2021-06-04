@@ -31,12 +31,11 @@ body_properties = {'Sun': (1.988e30, 6.955e5),
             'Neptune': (1.024e26, 24622.)
            }
 
-
 #consider the 'real' simulation of 9 plents and 1 asteroid!
 if flag == 'Real':
     
     bodies_to_query = 9
-    output_file = 'source/real_planet_coords.txt'
+    output_file = 'source/helper/real_planet_coords.txt'
 
     #querys JPL and writes to file
     with open(output_file, 'w') as f:

@@ -24,12 +24,12 @@ MULTI_PY_SIM=false
 
 #If set to true, this will run the simulation using the real planets coordinates
 #then will plot the trajectories of the planets and the time taken by each sim
-REAL=true
+REAL=false
 
 
 #If REAL=false and this is true, creates heatmaps comparing the simulations
 #this always excludes the basic python simulation, but uses the other 4
-#this can take a while!
+#note that this takes ~2 hours to complete
 HEATMAP=true
 
 
