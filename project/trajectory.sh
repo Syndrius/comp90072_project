@@ -1,24 +1,20 @@
 #Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
 
-#NEEDS WORK
-#this file needs to be cleaned up big time! currently it is terrible!
+#main file that controls which simulation and scenarios are run
+#calls the coordinate generation, the simulations and the plotting files
 
-#TODO
+#reads the inputs
 source inputs
 
 #empty strings for adding flags to be passed around to!
 PY_FLAGS=""
 C_FLAGS=""
 
-#time files saved as bodies_iters_time.txt
 
-#can do this over a loop to see how they run with variable number of bodies!
-#or just manually run it a few times and save the output files!
-
-RESULTS_DIR="source/data"
+DATA_DIR="source/data"
 
 #creates the directories if they don't exist
-if [ ! -e $RESULTS_DIR ]; then
+if [ ! -e $DATA_DIR ]; then
     eval mkdir source/data
 fi
 

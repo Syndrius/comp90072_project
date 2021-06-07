@@ -1,9 +1,15 @@
 Written by Matthew Thomas 831343, May 2021 for COMP90072 at unimelb
 
-This software was written to test different implementations of a simple simulation of planetary motions. An analysis of the software can be found in the pdf
+This software was written to test different implementations of a simple simulation of planetary motions. An analysis of the software can be found in report.pdf
 
-The two key files in this are inputs and trajectories. The inputs file should be the only file that needs to be interacted with to run the simulation. The input file contains boolean options for which of the simulations should be run, and the different scenarios. This includes running the simulations with the real planetary data or with the randomly generated data. It also contains the option for creating the heatmap data shown in the comparison section. Once the appropriate inputs are chosen, the file trajectories will run the appropriate simulations and save the results into the results folder.
+The two key files in this are inputs and trajectories.
+The inputs file should be the only file that needs to be interacted with to run the simulation. The input file contains boolean options for which of the simulations should be run, and the different scenarios.
+This includes running the simulations with the real planetary data or with the randomly generated data. It also contains the option for creating the heatmap data shown in the comparison section. Once the appropriate inputs are chosen, the file trajectories will run the appropriate simulations and save the results into the results folder.
 
+
+The trajectories.sh file is a bash script, upon reading the booleans in inputs, will generate the appropriate initial coordinates and calls the appropriate simulations, store in the source folder.
+
+Each simulation reads in the initial coordinates, completes the simulation and writes the position histories to file for plotting. They also store and write to file the time taken for the simulation to complete.
 
 The software makes use of the following python libraries
 - numpy
